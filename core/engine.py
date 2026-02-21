@@ -56,22 +56,25 @@ def gerar_embedding(texto):
 
 
 def buscar_blocos(pergunta, top_k=3):
-    base = json.loads(
-        Path("data/embeddings.json").read_text(encoding="utf-8")
-    )
+    # Carrega o embeddings.json
+    base = json.loads(Path("data/embeddings.json").read_text(encoding="utf-8"))
 
+    # Gera embedding da pergunta
     emb_pergunta = gerar_embedding(pergunta)
 
     scores = []
     for item in base:
-        sim = cosine_similarity(emb_pergunta, item["embedding"])
-        scores.append((sim, item["text"]))
+        # Verifica se o item tem 'embedding' e 'texto'
+        if "embedding" in item and "texto" in item:
+            sim = cosine_similarity(emb_pergunta, item["embedding"])
+            scores.append((sim, item["texto"]))
 
+    # Ordena por similaridade
     scores.sort(reverse=True, key=lambda x: x[0])
 
-    melhor_score = scores[0][0]
-
-    if melhor_score < THRESHOLD:
+    # Se não houver score suficiente, retorna resposta zen aleatória
+    if not scores or scores[0][0] < THRESHOLD:
         return [random.choice(RESPOSTAS_ZEN)]
 
+    # Retorna os top_k textos mais relevantes
     return [texto for _, texto in scores[:top_k]]
