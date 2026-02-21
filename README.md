@@ -110,3 +110,42 @@ make embeddings
 Mente Zen, Mente de Principiante — Shunryu Suzuki
 
 Koans clássicos do Zen Budismo
+🛠️ Tecnologias
+
+Python 3.10+
+
+NLP
+
+Embeddings vetoriais
+
+Busca semântica
+
+Arquitetura RAG
+
+🧭 Próximos Passos
+
+Interface gráfica (UI)
+
+Integração com LLMs externos
+
+Persistência vetorial em banco (FAISS, Chroma, etc)
+
+Suporte multi-livros
+
+Ajuste fino de respostas (prompt engineering)
+
+🧘 Filosofia do Projeto
+
+“Na mente do principiante há muitas possibilidades.
+Na mente do especialista, poucas.”
+
+Este projeto busca unir tecnologia, contemplação e clareza.
+
+📄 Licença
+
+Este projeto é open-source sob licença MIT.
+
+✨ Autor
+
+Juscelino Lima
+Projeto experimental de IA, filosofia e engenharia de software.
