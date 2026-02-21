@@ -5,7 +5,9 @@ import requests
 from pathlib import Path
 
 # Endpoint do Ollama para embeddings
-EMBED_URL = "http://localhost:11434/api/embeddings"
+# EMBED_URL = "http://localhost:11434/api/embeddings"
+import os
+EMBED_URL = os.getenv("EMBED_URL", "http://localhost:11434/api/embeddings")
 MODEL = "nomic-embed-text"
 
 # Limiar de similaridade (threshold) para aceitar respostas relevantes:
