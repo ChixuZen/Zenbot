@@ -1,13 +1,12 @@
+import os
+import json
+import random
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
-import random
-import json
+from zen import responder, verificar_chave, aquecer_modelo
 
-# Importa do zen.py tudo o que precisamos
-from zen import responder, verificar_ollama, aquecer_modelo
-
-# Executa verificações e aquecimento assim que o servidor iniciar
-verificar_ollama()
+# Inicialização (opcional, pode ser removida se preferir)
+verificar_chave()
 aquecer_modelo()
 
 app = FastAPI()
@@ -15,26 +14,21 @@ app = FastAPI()
 # ============================================
 # MENSAGENS ZEN PARA O FRONTEND
 # ============================================
-DESPEDIDA_JS = [
-    "Que o silêncio te acompanhe.",
-    "O caminho se abre diante de ti.",
-    "Vá em paz. O vazio te espera.",
-    "Que a mente de principiante floresça.",
-    "Até o próximo encontro no vazio.",
-    "O vento leva minhas palavras. Fica com o silêncio.",
-    "Lembre-se: a montanha também é caminho."
-]
-
-AGUARDANDO_JS = [
+AGUARDANDO = [
     "Chizu medita...",
     "O mestre contempla sua pergunta...",
     "Uma brisa suave anuncia a resposta...",
     "O silêncio se aprofunda...",
     "Chizu respira fundo...",
-    "As folhas balançam ao vento...",
-    "O incenso queima lentamente...",
-    "A névoa se dissipa...",
-    "O vento carrega as palavras..."
+    "As folhas balançam ao vento..."
+]
+
+DESPEDIDA = [
+    "Que o silêncio te acompanhe.",
+    "O caminho se abre diante de ti.",
+    "Vá em paz. O vazio te espera.",
+    "Que a mente de principiante floresça.",
+    "Até o próximo encontro no vazio."
 ]
 
 # ============================================
@@ -157,7 +151,7 @@ HTML_PAGE = f"""
         </div>
 
         <div class="resposta" id="resposta">
-            <!-- A mensagem inicial será inserida dinamicamente pelo JavaScript -->
+            <em>o silêncio ainda habita aqui...</em>
         </div>
 
         <div class="footer">
@@ -166,51 +160,34 @@ HTML_PAGE = f"""
     </div>
 
     <script>
-        // ============================================
-        // MENSAGENS ZEN RANDOMIZADAS
-        // ============================================
-        const DESPEDIDA = {json.dumps(DESPEDIDA_JS)};
-        const AGUARDANDO = {json.dumps(AGUARDANDO_JS)};
-
-        // Palavras que encerram a conversa
+        const AGUARDANDO = {json.dumps(AGUARDANDO)};
+        const DESPEDIDA = {json.dumps(DESPEDIDA)};
         const PALAVRAS_SAIDA = ['sair', 'exit', 'quit', 'gassho', 'obrigado'];
 
-        // Elementos da página
         const input = document.getElementById('pergunta');
         const button = document.getElementById('perguntar');
         const respostaDiv = document.getElementById('resposta');
 
-        // Função para escolher uma mensagem aleatória de um array
         function randomMsg(arr) {{
             return arr[Math.floor(Math.random() * arr.length)];
         }}
 
-        // Define uma mensagem inicial aleatória ao carregar a página
-        window.addEventListener('DOMContentLoaded', () => {{
-            respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
-        }});
-
-        // Função para encerrar a conversa
         function encerrarConversa() {{
-            const msg = randomMsg(DESPEDIDA);
-            respostaDiv.innerHTML = `🧘 ${{msg}}`;
+            respostaDiv.innerHTML = `🧘 ${{randomMsg(DESPEDIDA)}}`;
             input.disabled = true;
             button.disabled = true;
             input.value = '';
         }}
 
-        // Função principal para fazer a pergunta
         async function fazerPergunta() {{
             const pergunta = input.value.trim();
             if (!pergunta) return;
 
-            // Verifica se é palavra de saída
             if (PALAVRAS_SAIDA.includes(pergunta.toLowerCase())) {{
                 encerrarConversa();
                 return;
             }}
 
-            // Feedback visual com mensagem aleatória
             button.classList.add('loading');
             respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
 
@@ -220,20 +197,16 @@ HTML_PAGE = f"""
                     headers: {{ 'Content-Type': 'application/json' }},
                     body: JSON.stringify({{ pergunta }})
                 }});
-
                 const data = await response.json();
-                // A resposta já pode conter formatação (quebras de linha)
                 respostaDiv.innerHTML = data.resposta.replace(/\\n/g, '<br>');
             }} catch (error) {{
                 respostaDiv.innerHTML = '<em>(o vento levou sua pergunta... tente novamente)</em>';
             }} finally {{
                 button.classList.remove('loading');
             }}
-
-            input.value = '';  // limpa campo após envio
+            input.value = '';
         }}
 
-        // Event listeners
         button.addEventListener('click', fazerPergunta);
         input.addEventListener('keypress', (e) => {{
             if (e.key === 'Enter') fazerPergunta();
@@ -243,9 +216,6 @@ HTML_PAGE = f"""
 </html>
 """
 
-# ============================================
-# ROTAS DA API
-# ============================================
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
     return HTML_PAGE
@@ -254,18 +224,15 @@ async def get_index():
 async def ask(request: Request):
     data = await request.json()
     pergunta = data.get("pergunta", "").strip()
-
     if not pergunta:
         return JSONResponse({"resposta": "(silêncio)"})
 
-    # Tratamento de saída também no backend (fallback)
     if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
-        return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
+        return JSONResponse({"resposta": random.choice(DESPEDIDA)})
 
     resposta = responder(pergunta)
     return JSONResponse({"resposta": resposta})
 
-# Para executar diretamente (opcional)
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
