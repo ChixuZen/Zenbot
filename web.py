@@ -3,7 +3,9 @@ from fastapi.responses import HTMLResponse, JSONResponse
 import random
 import json
 from zen import responder, verificar_chave, aquecer_modelo
+from uuid import uuid4
 
+# Memória temporária em RAM (limpa quando o Render reinicia)
 conversation_memory = {}
 
 # ============================================
@@ -36,7 +38,7 @@ AGUARDANDO_JS = [
 ]
 
 # ============================================
-# PÁGINA HTML COMPLETA
+# PÁGINA HTML COMPLETA (LAYOUT PREMIUM)
 # ============================================
 HTML_PAGE = f"""
 <!DOCTYPE html>
@@ -55,112 +57,129 @@ HTML_PAGE = f"""
             min-height: 100vh;
             margin: 0;
             padding: 1rem;
+            color: #2c3e2f;
         }}
         .container {{
-            max-width: 600px;
+            max-width: 550px;
             width: 100%;
             background: white;
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-radius: 45px;
+            padding: 4rem 2.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            text-align: center;
             border: 1px solid #e0d6cc;
         }}
         h1 {{
-            font-size: 2rem;
+            font-size: 2.8rem;
+            margin: 0;
             font-weight: 400;
-            color: #2c3e2f;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }}
         .sub {{
+            font-size: 1.1rem;
+            color: #4a5a4d;
+            font-style: italic;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }}
+        .ref {{
+            font-size: 0.9rem;
+            color: #8c8375;
+            line-height: 1.4;
+            margin-bottom: 3rem;
+        }}
+        .ref em {{
             color: #6b5e4a;
             font-style: italic;
-            margin-bottom: 2rem;
-            border-bottom: 1px dashed #dcd3c9;
-            padding-bottom: 1rem;
+            display: block;
+            margin: 4px 0;
         }}
         .input-group {{
             display: flex;
-            gap: 0.5rem;
+            gap: 12px;
+            margin-bottom: 1.5rem;
         }}
         input {{
             flex: 1;
-            padding: 1rem;
-            border: 2px solid #e0d6cc;
-            border-radius: 40px;
-            font-size: 1rem;
+            padding: 1.2rem 1.6rem;
+            border: 1px solid #e0d6cc;
+            border-radius: 25px;
             font-family: inherit;
-            background: #fefcf8;
-            transition: border 0.2s;
+            font-size: 1.1rem;
+            background: #fff;
+            outline: none;
+            transition: border 0.3s;
         }}
         input:focus {{
-            outline: none;
             border-color: #9b8c7c;
         }}
         button {{
-            background: #2c3e2f;
+            background: #2d362e;
             color: white;
             border: none;
-            border-radius: 40px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
+            padding: 0 2.2rem;
+            border-radius: 25px;
             cursor: pointer;
             font-family: inherit;
-            transition: background 0.2s;
+            font-size: 1.1rem;
+            transition: background 0.3s;
         }}
         button:hover {{
-            background: #1f2e22;
+            background: #1f2620;
         }}
         button:disabled, input:disabled {{
             opacity: 0.5;
             cursor: not-allowed;
         }}
+        .loading {{
+            opacity: 0.5;
+            pointer-events: none;
+        }}
         .resposta {{
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #fefcf8;
-            border-radius: 20px;
-            border: 1px solid #e0d6cc;
-            min-height: 100px;
-            white-space: pre-wrap;
+            margin-top: 1rem;
+            padding: 2rem;
+            min-height: 120px;
+            border: 1px solid #ede4db;
+            border-radius: 30px;
+            background: #fdfcfb;
+            text-align: left;
             font-size: 1.1rem;
             line-height: 1.6;
-            color: #2c3e2f;
+            color: #3e4a3f;
+            white-space: pre-wrap;
         }}
         .resposta em {{
             color: #7f6e5d;
             font-style: italic;
         }}
         .footer {{
-            margin-top: 2rem;
-            font-size: 0.8rem;
-            color: #b2a392;
-            text-align: center;
-        }}
-        .loading {{
-            opacity: 0.5;
-            pointer-events: none;
+            margin-top: 2.5rem;
+            font-size: 0.85rem;
+            color: #a3998e;
+            letter-spacing: 0.5px;
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧘 Chizu</h1>
-        <div class="sub">Mestre Zen digital</div>
+        <div class="sub">mestre zen digital</div>
+        
         <div class="ref">
-        Inspirado em<br>
-        <em>"Mente Zen, Mente de Principiante"</em><br>
-        Shunryu Suzuki
+            Inspirado em<br>
+            <em>"Mente Zen, Mente de Principiante"</em>
+            Shunryu Suzuki
         </div>
+
         <div class="input-group">
-            <input type="text" id="pergunta" placeholder="sua pergunta..." autofocus>
+            <input type="text" id="pergunta" placeholder="o que é Zazen?" autofocus>
             <button id="perguntar">perguntar</button>
         </div>
 
-        <div class="resposta" id="resposta">
-            <!-- mensagem inicial será inserida pelo JS -->
-        </div>
+        <div class="resposta" id="resposta"></div>
 
         <div class="footer">
             digite "sair" ou "gassho" para encerrar
@@ -180,29 +199,23 @@ HTML_PAGE = f"""
             return arr[Math.floor(Math.random() * arr.length)];
         }}
 
-        // Mensagem inicial aleatória
         window.addEventListener('DOMContentLoaded', () => {{
             respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
         }});
-
-        function encerrarConversa() {{
-            const msg = randomMsg(DESPEDIDA);
-            respostaDiv.innerHTML = `🧘 ${{msg}}`;
-            input.disabled = true;
-            button.disabled = true;
-            input.value = '';
-        }}
 
         async function fazerPergunta() {{
             const pergunta = input.value.trim();
             if (!pergunta) return;
 
             if (PALAVRAS_SAIDA.includes(pergunta.toLowerCase())) {{
-                encerrarConversa();
+                respostaDiv.innerHTML = `🧘 ${{randomMsg(DESPEDIDA)}}`;
+                input.disabled = true;
+                button.disabled = true;
                 return;
             }}
 
             button.classList.add('loading');
+            button.disabled = true;
             respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
 
             try {{
@@ -212,19 +225,18 @@ HTML_PAGE = f"""
                     body: JSON.stringify({{ pergunta }})
                 }});
                 const data = await response.json();
-                respostaDiv.innerHTML = data.resposta.replace(/\\n/g, '<br>');
+                respostaDiv.innerHTML = data.resposta;
             }} catch (error) {{
-                respostaDiv.innerHTML = '<em>(o vento levou sua pergunta... tente novamente)</em>';
+                respostaDiv.innerHTML = '<em>(o vento levou sua pergunta...)</em>';
             }} finally {{
                 button.classList.remove('loading');
+                button.disabled = false;
             }}
             input.value = '';
         }}
 
         button.addEventListener('click', fazerPergunta);
-        input.addEventListener('keypress', (e) => {{
-            if (e.key === 'Enter') fazerPergunta();
-        }});
+        input.addEventListener('keypress', (e) => {{ if (e.key === 'Enter') fazerPergunta(); }});
     </script>
 </body>
 </html>
@@ -237,7 +249,6 @@ HTML_PAGE = f"""
 async def get_index():
     return HTML_PAGE
 
-
 @app.post("/ask")
 async def ask(request: Request):
     try:
@@ -246,28 +257,24 @@ async def ask(request: Request):
         return JSONResponse({"resposta": "(silêncio)"})
 
     pergunta = data.get("pergunta", "").strip()
-
     if not pergunta:
         return JSONResponse({"resposta": "(silêncio)"})
 
     if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
         return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
 
-    # Identificação simples da sessão
-    from uuid import uuid4
-
-    session_id = request.cookies.get("chizu_session")
-
-    if not session_id:
-        session_id = str(uuid4())
-
-    # Recupera histórico da sessão
+    # Identificação da sessão para memória
+    session_id = request.cookies.get("chizu_session") or str(uuid4())
     historico = conversation_memory.setdefault(session_id, [])
 
-    # Chama o mestre com memória
-    resposta = responder(pergunta, historico)
+    # Chama o zen.py (certifique-se que responder aceita pergunta e historico)
+    try:
+        resposta = responder(pergunta, historico)
+    except TypeError:
+        # Fallback caso seu zen.py ainda não aceite histórico
+        resposta = responder(pergunta)
 
-    # Atualiza memória curta (máx 3 interações = 6 mensagens)
+    # Atualiza memória
     historico.append({"role": "user", "content": pergunta})
     historico.append({"role": "assistant", "content": resposta})
     conversation_memory[session_id] = historico[-6:]
