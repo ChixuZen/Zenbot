@@ -165,9 +165,9 @@ HTML_PAGE = f"""
 </head>
 <body>
     <div class="container">
-        <h1>🧘 Chizu</h1>
+        <h1>Chizu</h1>
         <div class="sub">mestre zen digital</div>
-        
+        <img src="avatar.png" alt="Mestre Chizu em Zazen" class="avatar">  
         <div class="ref">
             Inspirado em<br>
             <em>"Mente Zen, Mente de Principiante"</em>
@@ -176,13 +176,13 @@ HTML_PAGE = f"""
 
         <div class="input-group">
             <input type="text" id="pergunta" placeholder="Sua pergunta...?" autofocus>
-            <button id="perguntar">perguntar</button>
+            <button id="perguntar">Enviar</button>
         </div>
 
         <div class="resposta" id="resposta"></div>
 
         <div class="footer">
-            digite "gassho", "obrigado", "ok", "sair" , "exit"  ou "quit" para encerrar
+            digite "gassho", "ok" ou  "sair"  para encerrar
         </div>
     </div>
 
