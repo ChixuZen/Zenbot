@@ -112,6 +112,8 @@ RESPOSTA:
             }
 
             r = requests.post(GROQ_URL, json=payload, headers=headers, timeout=TIMEOUT)
+            print(f"[LOG] Status Groq: {r.status_code}")
+            print(f"[LOG] Resposta bruta: {r.text[:200]}")
             r.raise_for_status()
             resposta = r.json()["choices"][0]["message"]["content"].strip()
             return resposta
