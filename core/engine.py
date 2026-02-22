@@ -9,7 +9,7 @@ EMBED_URL = os.getenv("EMBED_URL", "http://localhost:11434/api/embeddings")
 MODEL = os.getenv("EMBED_MODEL", "nomic-embed-text")
 
 # Limiar de similaridade (ajuste conforme necessário)
-THRESHOLD = 0.20
+THRESHOLD = 0.30
 
 # Respostas contemplativas quando não há boa correspondência
 RESPOSTAS_ZEN = [
@@ -62,7 +62,13 @@ def buscar_blocos(pergunta, top_k=3):
 
     scores.sort(reverse=True, key=lambda x: x[0])
 
-    if not scores or scores[0][0] < THRESHOLD:
+    if not scores:
+        return [random.choice(RESPOSTAS_ZEN)]
+
+    top_score = scores[0][0]
+
+    # Score muito baixo → silêncio zen
+    if top_score < THRESHOLD:
         return [random.choice(RESPOSTAS_ZEN)]
 
     return [texto for _, texto in scores[:top_k]]

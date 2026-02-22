@@ -11,7 +11,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")          # Obrigatório
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 TIMEOUT = 30
-TOP_K = 3
+TOP_K = 2
 
 # ============================================
 # MENSAGENS ZEN RANDOMIZADAS
@@ -82,13 +82,19 @@ def responder(pergunta, top_k=TOP_K, tentativas=2):
                 return random.choice(ERROS_ZEN)
 
             # Limita cada bloco para não estourar o contexto
-            blocos_limitados = [b[:1000] for b in blocos]
+            blocos_limitados = [b[:500] for b in blocos]
             contexto = "\n\n---\n\n".join(blocos_limitados)
 
             # Prompt limpo e direto (sem exemplos longos)
             prompt = f"""
-Você é Chizu, um mestre zen. Responda apenas com base nos textos abaixo, de forma concisa.
+Você é Chizu, um mestre zen.
 
+Use apenas os TEXTOS fornecidos.
+Não invente nada além deles.
+Se os textos não contiverem resposta clara, ofereça uma breve reflexão contemplativa.
+
+Responda com frases curtas, simples e profundas.
+Evite explicações longas.
 TEXTOS:
 {contexto}
 
@@ -104,10 +110,15 @@ RESPOSTA:
             payload = {
                 "model": MODEL,
                 "messages": [
-                    {"role": "system", "content": "Você é Chizu, um mestre zen. Responda com frases curtas, baseado apenas nos textos fornecidos."},
+                    {"role": "system", "content": 
+ "Você é Chizu, um mestre zen. "
+ "Baseie-se apenas nos textos fornecidos. "
+ "Se não houver resposta clara, responda com uma reflexão contemplativa curta. "
+ "Use linguagem simples, direta e profunda."
+},
                     {"role": "user", "content": prompt}
                 ],
-                "temperature": 0.5,
+                "temperature": 0.35,
                 "max_tokens": 300
             }
 
