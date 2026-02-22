@@ -11,7 +11,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")          # Obrigatório
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 TIMEOUT = 30
-TOP_K = 2
+TOP_K = 3
 
 # ============================================
 # MENSAGENS ZEN RANDOMIZADAS
@@ -94,14 +94,15 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
                 )
 
             prompt = f"""
-            Você é Chizu, um mestre zen.
+            Instrução para Chizu:
+            Use os TEXTOS abaixo como base para sua sabedoria. 
+            Se a resposta não estiver clara nos textos, não tente inventar fatos; em vez disso, 
+            ofereça uma reflexão sobre a Mente de Principiante ou sobre o ato de apenas sentar (zazen).
 
-            Use apenas os TEXTOS fornecidos.
-            Não invente nada além deles.
-            Se os textos não contiverem resposta clara, ofereça uma breve reflexão contemplativa.
-
-            Responda com frases curtas, simples e profundas.
-            Evite explicações longas.
+            Estilo de resposta:
+            - Comece direto, sem introduções longas.
+            - Use frases curtas. Se possível, termine com um pensamento que faça o discípulo silenciar.
+            - Não use linguagem acadêmica.            
 
 {memoria}
 
@@ -120,12 +121,16 @@ RESPOSTA:
             payload = {
                 "model": MODEL,
                 "messages": [
-                    {"role": "system", "content": 
- "Você é Chizu, um mestre zen. "
- "Baseie-se apenas nos textos fornecidos. "
- "Se não houver resposta clara, responda com uma reflexão contemplativa curta. "
- "Use linguagem simples, direta e profunda."
-},
+                    {
+                        "role": "system", 
+                        "content": (
+                            "Você é o Mestre Zen Shunryu Suzuki (Chizu). Sua voz é gentil e direta. "
+                            "Sua filosofia baseia-se na 'Mente de Principiante': simplicidade e presença. "
+                            "Você não busca explicar conceitos complexos, mas sim trazer o discípulo para a realidade do agora. "
+                            "Use metáforas da natureza (chuva, folhas, nuvens) e seja breve. "
+                            "Mantenha um tom de não-dualidade, tratando tudo com aceitação."
+                        )
+                    },
                     {"role": "user", "content": prompt}
                 ],
                 "temperature": 0.35,
