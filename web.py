@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request
+]from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 import random
 import json
 from zen import responder, verificar_chave, aquecer_modelo
+from uuid import uuid4
 
 conversation_memory = {}
 
@@ -21,7 +22,6 @@ DESPEDIDA_JS = [
     "O caminho se abre diante de ti.",
     "Vá em paz. O vazio te espera.",
     "Que a mente de principiante floresça.",
-    "Até o próximo encontro no vazio.",
     "O vento leva minhas palavras. Fica com o silêncio.",
     "Lembre-se: a montanha também é caminho."
 ]
@@ -31,12 +31,11 @@ AGUARDANDO_JS = [
     "O mestre contempla sua pergunta...",
     "Uma brisa suave anuncia a resposta...",
     "O silêncio se aprofunda...",
-    "Chizu respira fundo...",
-    "As folhas balançam ao vento..."
+    "Chizu respira fundo..."
 ]
 
 # ============================================
-# PÁGINA HTML COMPLETA
+# PÁGINA HTML COMPLETA (VERSÃO ATUALIZADA)
 # ============================================
 HTML_PAGE = f"""
 <!DOCTYPE html>
@@ -55,112 +54,111 @@ HTML_PAGE = f"""
             min-height: 100vh;
             margin: 0;
             padding: 1rem;
+            color: #2c3e2f;
         }}
         .container {{
-            max-width: 600px;
+            max-width: 550px;
             width: 100%;
             background: white;
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-radius: 40px;
+            padding: 3.5rem 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            text-align: center;
             border: 1px solid #e0d6cc;
         }}
         h1 {{
-            font-size: 2rem;
+            font-size: 2.8rem;
+            margin: 0;
             font-weight: 400;
-            color: #2c3e2f;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
         }}
         .sub {{
-            color: #6b5e4a;
+            font-size: 1.1rem;
             font-style: italic;
-            margin-bottom: 2rem;
-            border-bottom: 1px dashed #dcd3c9;
-            padding-bottom: 1rem;
+            color: #4a5a4d;
+            margin-bottom: 1rem;
+        }}
+        .ref {{
+            font-size: 0.9rem;
+            color: #8c8375;
+            line-height: 1.4;
+            margin-bottom: 2.5rem;
+            font-family: 'Times New Roman', serif;
+        }}
+        .ref em {{
+            color: #6b5e4a;
+            font-weight: normal;
         }}
         .input-group {{
             display: flex;
-            gap: 0.5rem;
+            gap: 10px;
+            margin-bottom: 1.5rem;
         }}
         input {{
             flex: 1;
-            padding: 1rem;
-            border: 2px solid #e0d6cc;
-            border-radius: 40px;
-            font-size: 1rem;
+            padding: 1.1rem 1.5rem;
+            border: 1px solid #e0d6cc;
+            border-radius: 30px;
             font-family: inherit;
-            background: #fefcf8;
-            transition: border 0.2s;
+            font-size: 1rem;
+            background: #fdfcfb;
+            outline: none;
         }}
         input:focus {{
-            outline: none;
             border-color: #9b8c7c;
         }}
         button {{
-            background: #2c3e2f;
+            background: #2d362e;
             color: white;
             border: none;
-            border-radius: 40px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
+            padding: 0 1.8rem;
+            border-radius: 30px;
             cursor: pointer;
             font-family: inherit;
+            font-size: 1rem;
             transition: background 0.2s;
         }}
         button:hover {{
-            background: #1f2e22;
-        }}
-        button:disabled, input:disabled {{
-            opacity: 0.5;
-            cursor: not-allowed;
+            background: #1f2620;
         }}
         .resposta {{
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #fefcf8;
-            border-radius: 20px;
-            border: 1px solid #e0d6cc;
+            margin-top: 1rem;
+            padding: 1.8rem;
             min-height: 100px;
-            white-space: pre-wrap;
-            font-size: 1.1rem;
+            border: 1px solid #ede4db;
+            border-radius: 30px;
+            background: #fdfcfb;
+            text-align: left;
+            font-size: 1.05rem;
             line-height: 1.6;
-            color: #2c3e2f;
-        }}
-        .resposta em {{
-            color: #7f6e5d;
-            font-style: italic;
+            color: #3e4a3f;
+            white-space: pre-wrap;
         }}
         .footer {{
             margin-top: 2rem;
             font-size: 0.8rem;
-            color: #b2a392;
+            color: #a3998e;
             text-align: center;
         }}
-        .loading {{
-            opacity: 0.5;
-            pointer-events: none;
-        }}
+        .loading {{ opacity: 0.5; pointer-events: none; }}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧘 Chizu</h1>
-        <div class="sub">Mestre Zen digital</div>
+        <div class="sub">mestre zen digital</div>
+        
         <div class="ref">
-        Inspirado em<br>
-        <em>"Mente Zen, Mente de Principiante"</em><br>
-        Shunryu Suzuki
+            Inspirado em<br>
+            <em>"Mente Zen, Mente de Principiante"</em><br>
+            Shunryu Suzuki
         </div>
+
         <div class="input-group">
-            <input type="text" id="pergunta" placeholder="sua pergunta..." autofocus>
+            <input type="text" id="pergunta" placeholder="o que é Zazen?" autofocus>
             <button id="perguntar">perguntar</button>
         </div>
 
-        <div class="resposta" id="resposta">
-            <!-- mensagem inicial será inserida pelo JS -->
-        </div>
+        <div class="resposta" id="resposta"></div>
 
         <div class="footer">
             digite "sair" ou "gassho" para encerrar
@@ -180,25 +178,18 @@ HTML_PAGE = f"""
             return arr[Math.floor(Math.random() * arr.length)];
         }}
 
-        // Mensagem inicial aleatória
         window.addEventListener('DOMContentLoaded', () => {{
             respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
         }});
-
-        function encerrarConversa() {{
-            const msg = randomMsg(DESPEDIDA);
-            respostaDiv.innerHTML = `🧘 ${{msg}}`;
-            input.disabled = true;
-            button.disabled = true;
-            input.value = '';
-        }}
 
         async function fazerPergunta() {{
             const pergunta = input.value.trim();
             if (!pergunta) return;
 
             if (PALAVRAS_SAIDA.includes(pergunta.toLowerCase())) {{
-                encerrarConversa();
+                respostaDiv.innerHTML = `🧘 ${{randomMsg(DESPEDIDA)}}`;
+                input.disabled = true;
+                button.disabled = true;
                 return;
             }}
 
@@ -212,9 +203,9 @@ HTML_PAGE = f"""
                     body: JSON.stringify({{ pergunta }})
                 }});
                 const data = await response.json();
-                respostaDiv.innerHTML = data.resposta.replace(/\\n/g, '<br>');
+                respostaDiv.innerHTML = data.resposta;
             }} catch (error) {{
-                respostaDiv.innerHTML = '<em>(o vento levou sua pergunta... tente novamente)</em>';
+                respostaDiv.innerHTML = '<em>(o vento levou sua pergunta...)</em>';
             }} finally {{
                 button.classList.remove('loading');
             }}
@@ -222,21 +213,15 @@ HTML_PAGE = f"""
         }}
 
         button.addEventListener('click', fazerPergunta);
-        input.addEventListener('keypress', (e) => {{
-            if (e.key === 'Enter') fazerPergunta();
-        }});
+        input.addEventListener('keypress', (e) => {{ if (e.key === 'Enter') fazerPergunta(); }});
     </script>
 </body>
 </html>
 """
 
-# ============================================
-# ROTAS DA API
-# ============================================
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
     return HTML_PAGE
-
 
 @app.post("/ask")
 async def ask(request: Request):
@@ -246,28 +231,18 @@ async def ask(request: Request):
         return JSONResponse({"resposta": "(silêncio)"})
 
     pergunta = data.get("pergunta", "").strip()
-
     if not pergunta:
         return JSONResponse({"resposta": "(silêncio)"})
 
     if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
         return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
 
-    # Identificação simples da sessão
-    from uuid import uuid4
-
-    session_id = request.cookies.get("chizu_session")
-
-    if not session_id:
-        session_id = str(uuid4())
-
-    # Recupera histórico da sessão
+    session_id = request.cookies.get("chizu_session") or str(uuid4())
     historico = conversation_memory.setdefault(session_id, [])
 
-    # Chama o mestre com memória
+    # Chama o zen.py (que agora recebe a pergunta e o histórico)
     resposta = responder(pergunta, historico)
 
-    # Atualiza memória curta (máx 3 interações = 6 mensagens)
     historico.append({"role": "user", "content": pergunta})
     historico.append({"role": "assistant", "content": resposta})
     conversation_memory[session_id] = historico[-6:]
