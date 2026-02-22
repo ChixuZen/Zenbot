@@ -83,7 +83,7 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
                 return random.choice(ERROS_ZEN)
 
             # Limita cada bloco para não estourar o contexto
-            blocos_limitados = [b[:700] for b in blocos]
+            blocos_limitados = [b[:600] for b in blocos]
             contexto = "\n\n---\n\n".join(blocos_limitados)
  
 

@@ -2,8 +2,15 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 import random
 import json
+import base64
+import os
 from zen import responder, verificar_chave, aquecer_modelo
 from uuid import uuid4
+
+AVATAR_B64 = ""
+if os.path.exists("avatar.png"):
+    with open("avatar.png", "rb") as img_file:
+        AVATAR_B64 = f"data:image/png;base64,{base64.b64encode(img_file.read()).decode()}"
 
 # Memória temporária em RAM (limpa quando o Render reinicia)
 conversation_memory = {}
@@ -155,6 +162,12 @@ HTML_PAGE = f"""
             color: #7f6e5d;
             font-style: italic;
         }}
+        .avatar {{
+            width: 120px; /* Tamanho ideal para o topo */
+            height: auto;
+            margin: 0 auto 1.5rem auto; /* Centraliza e dá espaço para o texto */
+            display: block; /* Garante que o margin auto funcione */
+        }}        
         .footer {{
             margin-top: 2.5rem;
             font-size: 0.85rem;
@@ -167,7 +180,7 @@ HTML_PAGE = f"""
     <div class="container">
         <h1>Chizu</h1>
         <div class="sub">mestre zen digital</div>
-        <img src="avatar.png" alt="Mestre Chizu em Zazen" class="avatar">  
+        <img src="{AVATAR_B64}" alt="Mestre Chizu" class="avatar">
         <div class="ref">
             Inspirado em<br>
             <em>"Mente Zen, Mente de Principiante"</em>
