@@ -1,20 +1,30 @@
-import os
-import json
-import random
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
+import random
+import json
 from zen import responder, verificar_chave, aquecer_modelo
 
-# Inicialização (opcional, pode ser removida se preferir)
+# ============================================
+# INICIALIZAÇÃO
+# ============================================
 verificar_chave()
 aquecer_modelo()
-
 app = FastAPI()
 
 # ============================================
 # MENSAGENS ZEN PARA O FRONTEND
 # ============================================
-AGUARDANDO = [
+DESPEDIDA_JS = [
+    "Que o silêncio te acompanhe.",
+    "O caminho se abre diante de ti.",
+    "Vá em paz. O vazio te espera.",
+    "Que a mente de principiante floresça.",
+    "Até o próximo encontro no vazio.",
+    "O vento leva minhas palavras. Fica com o silêncio.",
+    "Lembre-se: a montanha também é caminho."
+]
+
+AGUARDANDO_JS = [
     "Chizu medita...",
     "O mestre contempla sua pergunta...",
     "Uma brisa suave anuncia a resposta...",
@@ -23,16 +33,8 @@ AGUARDANDO = [
     "As folhas balançam ao vento..."
 ]
 
-DESPEDIDA = [
-    "Que o silêncio te acompanhe.",
-    "O caminho se abre diante de ti.",
-    "Vá em paz. O vazio te espera.",
-    "Que a mente de principiante floresça.",
-    "Até o próximo encontro no vazio."
-]
-
 # ============================================
-# PÁGINA HTML (com CSS e JavaScript embutidos)
+# PÁGINA HTML COMPLETA
 # ============================================
 HTML_PAGE = f"""
 <!DOCTYPE html>
@@ -151,17 +153,17 @@ HTML_PAGE = f"""
         </div>
 
         <div class="resposta" id="resposta">
-            <em>o silêncio ainda habita aqui...</em>
+            <!-- mensagem inicial será inserida pelo JS -->
         </div>
 
         <div class="footer">
-            para encerrar, digite "sair", "gassho" ou "obrigado"
+            digite "sair" ou "gassho" para encerrar
         </div>
     </div>
 
     <script>
-        const AGUARDANDO = {json.dumps(AGUARDANDO)};
-        const DESPEDIDA = {json.dumps(DESPEDIDA)};
+        const DESPEDIDA = {json.dumps(DESPEDIDA_JS)};
+        const AGUARDANDO = {json.dumps(AGUARDANDO_JS)};
         const PALAVRAS_SAIDA = ['sair', 'exit', 'quit', 'gassho', 'obrigado'];
 
         const input = document.getElementById('pergunta');
@@ -172,8 +174,14 @@ HTML_PAGE = f"""
             return arr[Math.floor(Math.random() * arr.length)];
         }}
 
+        // Mensagem inicial aleatória
+        window.addEventListener('DOMContentLoaded', () => {{
+            respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
+        }});
+
         function encerrarConversa() {{
-            respostaDiv.innerHTML = `🧘 ${{randomMsg(DESPEDIDA)}}`;
+            const msg = randomMsg(DESPEDIDA);
+            respostaDiv.innerHTML = `🧘 ${{msg}}`;
             input.disabled = true;
             button.disabled = true;
             input.value = '';
@@ -216,6 +224,9 @@ HTML_PAGE = f"""
 </html>
 """
 
+# ============================================
+# ROTAS DA API
+# ============================================
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
     return HTML_PAGE
@@ -226,10 +237,8 @@ async def ask(request: Request):
     pergunta = data.get("pergunta", "").strip()
     if not pergunta:
         return JSONResponse({"resposta": "(silêncio)"})
-
     if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
-        return JSONResponse({"resposta": random.choice(DESPEDIDA)})
-
+        return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
     resposta = responder(pergunta)
     return JSONResponse({"resposta": resposta})
 
