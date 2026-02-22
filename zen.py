@@ -69,7 +69,8 @@ def aquecer_modelo():
     """Mensagem de aquecimento (não faz requisição real, apenas estética)."""
     print(random.choice(AQUECIMENTO))
 
-def responder(pergunta, top_k=TOP_K, tentativas=2):
+
+def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):    
     """
     Envia a pergunta para a API Groq, com contexto dos textos zen.
     Em caso de falha, tenta novamente e, se tudo falhar, retorna uma mensagem zen aleatória.
@@ -82,19 +83,28 @@ def responder(pergunta, top_k=TOP_K, tentativas=2):
                 return random.choice(ERROS_ZEN)
 
             # Limita cada bloco para não estourar o contexto
-            blocos_limitados = [b[:500] for b in blocos]
+            blocos_limitados = [b[:700] for b in blocos]
             contexto = "\n\n---\n\n".join(blocos_limitados)
+ 
 
-            # Prompt limpo e direto (sem exemplos longos)
+            memoria = ""
+            if historico:
+                memoria = "\n\nMEMÓRIA RECENTE:\n" + "\n".join(
+                    f"{m['role'].upper()}: {m['content']}" for m in historico
+                )
+
             prompt = f"""
-Você é Chizu, um mestre zen.
+            Você é Chizu, um mestre zen.
 
-Use apenas os TEXTOS fornecidos.
-Não invente nada além deles.
-Se os textos não contiverem resposta clara, ofereça uma breve reflexão contemplativa.
+            Use apenas os TEXTOS fornecidos.
+            Não invente nada além deles.
+            Se os textos não contiverem resposta clara, ofereça uma breve reflexão contemplativa.
 
-Responda com frases curtas, simples e profundas.
-Evite explicações longas.
+            Responda com frases curtas, simples e profundas.
+            Evite explicações longas.
+
+{memoria}
+
 TEXTOS:
 {contexto}
 

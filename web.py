@@ -4,6 +4,8 @@ import random
 import json
 from zen import responder, verificar_chave, aquecer_modelo
 
+conversation_memory = {}
+
 # ============================================
 # INICIALIZAÇÃO
 # ============================================
@@ -145,8 +147,12 @@ HTML_PAGE = f"""
 <body>
     <div class="container">
         <h1>🧘 Chizu</h1>
-        <div class="sub">mestre zen digital</div>
-
+        <div class="sub">Mestre Zen digital</div>
+        <div class="ref">
+        Inspirado em<br>
+        <em>"Mente Zen, Mente de Principiante"</em><br>
+        Shunryu Suzuki
+        </div>
         <div class="input-group">
             <input type="text" id="pergunta" placeholder="sua pergunta..." autofocus>
             <button id="perguntar">perguntar</button>
@@ -231,16 +237,44 @@ HTML_PAGE = f"""
 async def get_index():
     return HTML_PAGE
 
+
 @app.post("/ask")
 async def ask(request: Request):
-    data = await request.json()
-    pergunta = data.get("pergunta", "").strip() 
+    try:
+        data = await request.json()
+    except:
+        return JSONResponse({"resposta": "(silêncio)"})
+
+    pergunta = data.get("pergunta", "").strip()
+
     if not pergunta:
         return JSONResponse({"resposta": "(silêncio)"})
+
     if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
         return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
-    resposta = responder(pergunta)
-    return JSONResponse({"resposta": resposta})
+
+    # Identificação simples da sessão
+    from uuid import uuid4
+
+    session_id = request.cookies.get("chizu_session")
+
+    if not session_id:
+        session_id = str(uuid4())
+
+    # Recupera histórico da sessão
+    historico = conversation_memory.setdefault(session_id, [])
+
+    # Chama o mestre com memória
+    resposta = responder(pergunta, historico)
+
+    # Atualiza memória curta (máx 3 interações = 6 mensagens)
+    historico.append({"role": "user", "content": pergunta})
+    historico.append({"role": "assistant", "content": resposta})
+    conversation_memory[session_id] = historico[-6:]
+
+    response = JSONResponse({"resposta": resposta})
+    response.set_cookie("chizu_session", session_id, max_age=60*60*24*7)
+    return response
 
 if __name__ == "__main__":
     import uvicorn
