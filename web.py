@@ -175,14 +175,14 @@ HTML_PAGE = f"""
         </div>
 
         <div class="input-group">
-            <input type="text" id="pergunta" placeholder="o que é Zazen?" autofocus>
+            <input type="text" id="pergunta" placeholder="Sua pergunta...?" autofocus>
             <button id="perguntar">perguntar</button>
         </div>
 
         <div class="resposta" id="resposta"></div>
 
         <div class="footer">
-            digite "sair" ou "gassho" para encerrar
+            digite "gassho", "obrigado", "ok", "sair" , "exit"  ou "quit" para encerrar
         </div>
     </div>
 
