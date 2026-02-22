@@ -1,21 +1,21 @@
+import os
 import time
 import random
 import requests
-from core.search import buscar_blocos
+from core.engine import buscar_blocos
 
 # ============================================
 # CONFIGURAÇÕES
 # ============================================
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "llama3.2:3b"        # Modelo leve
-TIMEOUT = 120
-TOP_K = 5
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")          # Obrigatório
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+MODEL = "llama-3.3-70b-versatile"
+TIMEOUT = 30
+TOP_K = 3
 
 # ============================================
 # MENSAGENS ZEN RANDOMIZADAS
 # ============================================
-
-# Mensagens de erro (quando a IA falha após tentativas)
 ERROS_ZEN = [
     "O vento sopra forte e Chizu se cala por instantes. Tente novamente.",
     "Uma folha cai entre nós e a resposta se perde. Pergunte outra vez.",
@@ -29,7 +29,6 @@ ERROS_ZEN = [
     "O mestre está em meditação profunda. Aguarde um momento e tente de novo."
 ]
 
-# Mensagens de aquecimento (warm-up)
 AQUECIMENTO = [
     "(Aquecendo o mestre... aguarde)",
     "(Chizu prepara o incenso... só um instante)",
@@ -39,7 +38,6 @@ AQUECIMENTO = [
     "(Chizu respira fundo e se prepara para ouvir...)"
 ]
 
-# Mensagens de despedida
 DESPEDIDA = [
     "Que o silêncio te acompanhe.",
     "O caminho se abre diante de ti.",
@@ -50,15 +48,6 @@ DESPEDIDA = [
     "Lembre-se: a montanha também é caminho."
 ]
 
-# Mensagens quando não há blocos (contexto vazio)
-SEM_CONTEXTO = [
-    "(Silêncio.)",
-    "(O vazio responde por si.)",
-    "(Nem uma folha se move.)",
-    "(Chizu apenas sorri.)"
-]
-
-# Mensagens durante tentativa de retry
 RETRY_MSG = [
     "(Chizu hesita... tentando novamente.)",
     "(O vento sopra e a resposta demora...)",
@@ -70,63 +59,65 @@ RETRY_MSG = [
 # ============================================
 # FUNÇÕES AUXILIARES
 # ============================================
-def verificar_ollama():
-    try:
-        requests.get("http://localhost:11434/api/tags", timeout=5)
-    except:
-        print("❌ Ollama não está acessível. Certifique-se de que está rodando (ollama serve).")
+def verificar_chave():
+    """Verifica se a chave da API Groq está definida."""
+    if not GROQ_API_KEY:
+        print("❌ GROQ_API_KEY não definida. Configure a variável de ambiente.")
         exit(1)
 
 def aquecer_modelo():
+    """Mensagem de aquecimento (não faz requisição real, apenas estética)."""
     print(random.choice(AQUECIMENTO))
-    try:
-        requests.post(OLLAMA_URL, json={"model": MODEL, "prompt": "Olá", "stream": False}, timeout=60)
-    except:
-        pass
 
 def responder(pergunta, top_k=TOP_K, tentativas=2):
+    """
+    Envia a pergunta para a API Groq, com contexto dos textos zen.
+    Em caso de falha, tenta novamente e, se tudo falhar, retorna uma mensagem zen aleatória.
+    """
     for tentativa in range(tentativas):
         try:
+            # Busca os blocos mais relevantes
             blocos = buscar_blocos(pergunta, top_k=top_k)
             if not blocos:
-                return random.choice(SEM_CONTEXTO)
+                return random.choice(ERROS_ZEN)
 
-            contexto = "\n\n".join(blocos)
+            # Limita cada bloco para não estourar o contexto
+            blocos_limitados = [b[:1000] for b in blocos]
+            contexto = "\n\n---\n\n".join(blocos_limitados)
 
+            # Prompt limpo e direto (sem exemplos longos)
             prompt = f"""
-Você é Chizu, um mestre zen tradicional.
-Fale pouco. Use frases curtas.
-Não explique demais. Não dê conselhos diretos.
-Se a pergunta for confusa, devolva a confusão.
-Se for simples, responda com simplicidade.
-Às vezes, responda com uma pergunta.
-Seja paradoxal quando necessário.
-Baseie-se apenas nos textos abaixo.
+Você é Chizu, um mestre zen. Responda apenas com base nos textos abaixo, de forma concisa.
 
 TEXTOS:
 {contexto}
 
-PERGUNTA:
-{pergunta}
+PERGUNTA: {pergunta}
 
 RESPOSTA:
 """
-            r = requests.post(OLLAMA_URL, json={
-                "model": MODEL,
-                "prompt": prompt,
-                "stream": False
-            }, timeout=TIMEOUT)
-            r.raise_for_status()
-            return r.json()["response"].strip()
 
-        except requests.exceptions.Timeout:
-            if tentativa < tentativas - 1:
-                print(random.choice(RETRY_MSG))
-                time.sleep(2)
-            else:
-                return f"({random.choice(ERROS_ZEN)})"
+            headers = {
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            }
+            payload = {
+                "model": MODEL,
+                "messages": [
+                    {"role": "system", "content": "Você é Chizu, um mestre zen. Responda com frases curtas, baseado apenas nos textos fornecidos."},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.5,
+                "max_tokens": 300
+            }
+
+            r = requests.post(GROQ_URL, json=payload, headers=headers, timeout=TIMEOUT)
+            r.raise_for_status()
+            resposta = r.json()["choices"][0]["message"]["content"].strip()
+            return resposta
 
         except Exception as e:
+            print(f"\n[ERRO DETALHADO] {type(e).__name__}: {e}")
             if tentativa < tentativas - 1:
                 print(f"(Ocorreu um erro inesperado, mas Chizu persiste... tentativa {tentativa+2})")
                 time.sleep(2)
@@ -134,10 +125,10 @@ RESPOSTA:
                 return f"({random.choice(ERROS_ZEN)})"
 
 def main():
-    verificar_ollama()
+    verificar_chave()
     aquecer_modelo()
 
-    print("\n🧘‍♂️ Chizu — Mestre Zen Digital")
+    print("\n🧘‍♂️ Chizu — Mestre Zen Digital (via Groq)")
     print("Digite 'ok', 'sair', 'gassho' ou 'obrigado' para encerrar.\n")
 
     while True:
