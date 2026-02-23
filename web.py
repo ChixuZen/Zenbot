@@ -104,36 +104,43 @@ HTML_PAGE = f"""
             display: block;
             margin: 4px 0;
         }}
-        .input-group {{
-            display: flex;
-            gap: 12px;
-            margin-bottom: 1.5rem;
+
+        input:focus {{
+            border-color: #9b8c7c;
         }}
-        input {{
-            flex: 1;
+
+        .input-container {{ 
+            margin-bottom: 1rem;
+        }}
+
+        input {{ 
+            width: 100%; /* Faz o campo ocupar a largura total */
+            box-sizing: border-box;
             padding: 1.2rem 1.6rem;
             border: 1px solid #e0d6cc;
             border-radius: 25px;
             font-family: inherit;
             font-size: 1.1rem;
-            background: #fff;
             outline: none;
-            transition: border 0.3s;
         }}
-        input:focus {{
-            border-color: #9b8c7c;
+
+        .button-container {{ 
+            margin: 1.5rem 0; /* Cria o espaço entre a pergunta e a resposta */
+            text-align: center;
         }}
-        button {{
+
+        button {{ 
             background: #2d362e;
             color: white;
             border: none;
-            padding: 0 2.2rem;
+            padding: 0.8rem 2.5rem; /* Ajustei o padding para um formato de botão melhor */
             border-radius: 25px;
             cursor: pointer;
             font-family: inherit;
             font-size: 1.1rem;
-            transition: background 0.3s;
         }}
+
+
         button:hover {{
             background: #1f2620;
         }}
@@ -187,16 +194,25 @@ HTML_PAGE = f"""
             Shunryu Suzuki
         </div>
 
-        <div class="input-group">
+        <!-- Pergunta -->
+        <div class="input-container">
             <input type="text" id="pergunta" placeholder="Sua pergunta...?" autofocus>
-            <button id="perguntar">Enviar</button>
         </div>
 
-        <div class="resposta" id="resposta"></div>
+        <!-- Botão entre a pergunta e a resposta -->
+        <div class="button-container">
+            <button id="perguntar">enviar</button>
+        </div>
+
+        <!-- Resposta -->
+        <div class="resposta" id="resposta">
+            <em>O silêncio precede a resposta...</em>
+        </div>
 
         <div class="footer">
-            digite "gassho", "ok" ou  "sair"  para encerrar
+            digite "sair", "ok" ou "gassho" para encerrar
         </div>
+        
     </div>
 
     <script>
