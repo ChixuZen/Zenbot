@@ -196,12 +196,12 @@ HTML_PAGE = f"""
 
         <!-- Pergunta -->
         <div class="input-container">
-            <input type="text" id="pergunta" placeholder="Sua pergunta...?" autofocus>
+            <input type="text" id="pergunta" placeholder="Fale com Chizu" autofocus>
         </div>
 
         <!-- Botão entre a pergunta e a resposta -->
         <div class="button-container">
-            <button id="perguntar">enviar</button>
+            <button id="perguntar">Enviar</button>
         </div>
 
         <!-- Resposta -->
@@ -212,7 +212,7 @@ HTML_PAGE = f"""
         <div class="footer">
             digite "sair", "ok" ou "gassho" para encerrar
         </div>
-        
+
     </div>
 
     <script>
