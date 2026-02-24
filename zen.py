@@ -149,7 +149,9 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
                 pergunta = modo_mestre(pergunta)
 
             # Busca os blocos mais relevantes
+            print("[DEBUG] Pergunta recebida:", pergunta)            
             blocos = buscar_blocos(pergunta, top_k=top_k)
+            print("[DEBUG] Blocos retornados:", len(blocos))
             if not blocos:
                 return random.choice(ERROS_ZEN)
 
