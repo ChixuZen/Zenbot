@@ -15,6 +15,9 @@ STYLES_DIR = os.path.join(BASE_DIR, "styles")
 # FUNÇÕES DE CARGA
 # ============================================
 
+def escolha_segura(lista, fallback):
+    return random.choice(lista) if lista else fallback
+
 def carregar_lista(nome_arquivo, obrigatorio=True):
     path = os.path.join(STYLES_DIR, nome_arquivo)
 
@@ -145,16 +148,28 @@ def detectar_modo(pergunta):
 # ============================================
 # MODOS DE RESPOSTA
 # ============================================
-
 def modo_koan():
-    return random.choice(KOANS_CLASSICOS)
+    return escolha_segura(
+        KOANS_CLASSICOS,
+        "Quando não há palavras, o silêncio responde."
+    )
+
 
 def modo_meditacao():
-    return random.choice(MEDITACOES)
+    return escolha_segura(
+        MEDITACOES,
+        "Sente-se. Respire. Apenas isso."
+    )
+
 
 def modo_mestre(pergunta):
-    aforismo = random.choice(AFORISMOS)
+    aforismo = escolha_segura(
+        AFORISMOS,
+        "O caminho não está fora."
+    )
     return f"{aforismo}\n\n{pergunta}"
+
+
 
 def verificar_chave():
     """Verifica se a chave da API Groq está definida."""
