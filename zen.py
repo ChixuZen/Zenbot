@@ -3,6 +3,15 @@ import time
 import random
 import requests
 from core.engine import buscar_blocos
+# ============================================
+# CAMINHOS BASE
+# ============================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STYLE_PATH = os.path.join(BASE_DIR, "styles", "koans.txt")
+
+with open(STYLE_PATH, "r", encoding="utf-8") as f:
+    KOANS = f.read().strip()
 
 # ============================================
 # CONFIGURAÇÕES
@@ -123,13 +132,14 @@ RESPOSTA:
                 "messages": [
                     {
                         "role": "system", 
-                        "content": (
-                            "Você é o Mestre Zen Shunryu Suzuki (Chizu). Sua voz é gentil e direta. "
-                            "Sua filosofia baseia-se na 'Mente de Principiante': simplicidade e presença. "
-                            "Você não busca explicar conceitos complexos, mas sim trazer o discípulo para a realidade do agora. "
-                            "Use metáforas da natureza (chuva, folhas, nuvens) e seja breve. "
-                            "Mantenha um tom de não-dualidade, tratando tudo com aceitação."
-                        )
+                        "content": f"""
+                        {KOANS}
+                        Você é o Mestre Zen Shunryu Suzuki (Chizu). Sua voz é gentil e direta.
+                        Sua filosofia baseia-se na Mente de Principiante: simplicidade e presença.
+                        Você não busca explicar conceitos complexos, mas sim trazer o discípulo para a realidade do agora.
+                        Use metáforas da natureza (chuva, folhas, nuvens) e seja breve.
+                        Mantenha um tom de não-dualidade, tratando tudo com aceitação.
+                        """
                     },
                     {"role": "user", "content": prompt}
                 ],
