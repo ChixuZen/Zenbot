@@ -3,34 +3,72 @@ import time
 import random
 import requests
 from core.engine import buscar_blocos
+
 # ============================================
 # CAMINHOS BASE
 # ============================================
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# ============================================
-# CARREGAMENTO DOS ESTILOS ZEN
-# ============================================
-
 STYLES_DIR = os.path.join(BASE_DIR, "styles")
 
-def carregar_lista(nome_arquivo):
+# ============================================
+# FUNÇÕES DE CARGA
+# ============================================
+
+def carregar_lista(nome_arquivo, obrigatorio=True):
     path = os.path.join(STYLES_DIR, nome_arquivo)
+
     if not os.path.exists(path):
-        print(f"⚠ Arquivo não encontrado: {path}")
+        msg = f"⚠ Arquivo não encontrado: {path}"
+        if obrigatorio:
+            raise FileNotFoundError(msg)
+        print(msg)
         return []
 
     with open(path, "r", encoding="utf-8") as f:
-        return [l.strip() for l in f.read().split("\n") if l.strip()]
+        linhas = [l.strip() for l in f.read().splitlines() if l.strip()]
+
+    if obrigatorio and not linhas:
+        raise ValueError(f"⚠ Arquivo vazio: {path}")
+
+    return linhas
+
+
+def carregar_texto(nome_arquivo, obrigatorio=True):
+    path = os.path.join(STYLES_DIR, nome_arquivo)
+
+    if not os.path.exists(path):
+        msg = f"⚠ Arquivo não encontrado: {path}"
+        if obrigatorio:
+            raise FileNotFoundError(msg)
+        print(msg)
+        return ""
+
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
+# ============================================
+# CARGA DOS ESTILOS ZEN
+# ============================================
 
 AFORISMOS = carregar_lista("aforismos_zen.txt")
 KOANS_CLASSICOS = carregar_lista("koans_classicos.txt")
 MEDITACOES = carregar_lista("meditacoes_guiadas.txt")
-KOANS = carregar_lista("koans.txt")
 
-with open(os.path.join(STYLES_DIR, "system_prompt.txt"), encoding="utf-8") as f:
-    SYSTEM_PROMPT = f.read().strip()
+# Koan do momento usa os clássicos
+KOANS = KOANS_CLASSICOS
 
+SYSTEM_PROMPT = carregar_texto("system_prompt.txt")
+
+# ============================================
+# LOG DE INICIALIZAÇÃO
+# ============================================
+
+print("🧘 Estilos Zen carregados:")
+print(f"   • Aforismos: {len(AFORISMOS)}")
+print(f"   • Koans clássicos: {len(KOANS_CLASSICOS)}")
+print(f"   • Meditações: {len(MEDITACOES)}")
     
 # ============================================
 # CONFIGURAÇÕES
@@ -151,7 +189,6 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
             # Busca os blocos mais relevantes
             print("[DEBUG] Pergunta recebida:", pergunta)            
             blocos = buscar_blocos(pergunta, top_k=top_k)
-            print("[DEBUG] Blocos retornados:", len(blocos))
             if not blocos:
                 return random.choice(ERROS_ZEN)
 
