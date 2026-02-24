@@ -6,13 +6,32 @@ from core.engine import buscar_blocos
 # ============================================
 # CAMINHOS BASE
 # ============================================
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STYLE_PATH = os.path.join(BASE_DIR, "styles", "koans.txt")
 
-with open(STYLE_PATH, "r", encoding="utf-8") as f:
-    KOANS = f.read().strip()
+# ============================================
+# CARREGAMENTO DOS ESTILOS ZEN
+# ============================================
 
+STYLES_DIR = os.path.join(BASE_DIR, "styles")
+
+def carregar_lista(nome_arquivo):
+    path = os.path.join(STYLES_DIR, nome_arquivo)
+    if not os.path.exists(path):
+        print(f"⚠ Arquivo não encontrado: {path}")
+        return []
+
+    with open(path, "r", encoding="utf-8") as f:
+        return [l.strip() for l in f.read().split("\n") if l.strip()]
+
+AFORISMOS = carregar_lista("aforismos_zen.txt")
+KOANS_CLASSICOS = carregar_lista("koans_classicos.txt")
+MEDITACOES = carregar_lista("meditacoes_guiadas.txt")
+KOANS = carregar_lista("koans.txt")
+
+with open(os.path.join(STYLES_DIR, "system_prompt.txt"), encoding="utf-8") as f:
+    SYSTEM_PROMPT = f.read().strip()
+
+    
 # ============================================
 # CONFIGURAÇÕES
 # ============================================
@@ -65,9 +84,40 @@ RETRY_MSG = [
     "(O eco ainda não voltou. Aguarde.)"
 ]
 
+
 # ============================================
-# FUNÇÕES AUXILIARES
+# DETECÇÃO DE MODO
 # ============================================
+
+def detectar_modo(pergunta):
+    p = pergunta.lower().strip()
+
+    if p.startswith("/koan") or "koan" in p:
+        return "koan"
+
+    if p.startswith("/meditar") or "meditar" in p or "meditação" in p:
+        return "meditacao"
+
+    if p.startswith("/mestre"):
+        return "mestre"
+
+    return "normal"
+
+
+# ============================================
+# MODOS DE RESPOSTA
+# ============================================
+
+def modo_koan():
+    return random.choice(KOANS_CLASSICOS)
+
+def modo_meditacao():
+    return random.choice(MEDITACOES)
+
+def modo_mestre(pergunta):
+    aforismo = random.choice(AFORISMOS)
+    return f"{aforismo}\n\n{pergunta}"
+
 def verificar_chave():
     """Verifica se a chave da API Groq está definida."""
     if not GROQ_API_KEY:
@@ -86,6 +136,18 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
     """
     for tentativa in range(tentativas):
         try:
+
+            modo = detectar_modo(pergunta)
+
+            if modo == "koan":
+                return modo_koan()
+
+            if modo == "meditacao":
+                return modo_meditacao()
+
+            if modo == "mestre":
+                pergunta = modo_mestre(pergunta)
+
             # Busca os blocos mais relevantes
             blocos = buscar_blocos(pergunta, top_k=top_k)
             if not blocos:
@@ -133,12 +195,9 @@ RESPOSTA:
                     {
                         "role": "system", 
                         "content": f"""
-                        {KOANS}
-                        Você é o Mestre Zen Shunryu Suzuki (Chizu). Sua voz é gentil e direta.
-                        Sua filosofia baseia-se na Mente de Principiante: simplicidade e presença.
-                        Você não busca explicar conceitos complexos, mas sim trazer o discípulo para a realidade do agora.
-                        Use metáforas da natureza (chuva, folhas, nuvens) e seja breve.
-                        Mantenha um tom de não-dualidade, tratando tudo com aceitação.
+                        {SYSTEM_PROMPT}
+                        Koan do momento:
+                        {random.choice(KOANS)}
                         """
                     },
                     {"role": "user", "content": prompt}
