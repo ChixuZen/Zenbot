@@ -7,10 +7,10 @@ Ele foi criado tanto como um laboratório prático de estudo quanto como uma fer
 
 Esta documentação foi pensada para ser:
 
-- Clara
-- Didática
-- Progressiva
-- Aberta à colaboração
+- Clara  
+- Didática  
+- Progressiva  
+- Aberta à colaboração  
 
 Aqui você encontrará não apenas o código, mas todo o **raciocínio, decisões técnicas, conceitos envolvidos e aprendizados** ao longo da construção do projeto.
 
@@ -28,19 +28,38 @@ Criar um chatbot baseado em inteligência artificial capaz de responder pergunta
 
 ---
 
-## 📚 Estrutura da documentação
+## 📚 Navegação pela documentação
 
-- **Motivação** — Por que o projeto existe.
-- **Visão geral** — O que é o ZenBot.
-- **Evolução do projeto** — Como ele foi sendo construído.
-- **Arquitetura** — Como o sistema funciona por dentro.
-- **Ferramentas** — Quais tecnologias são usadas.
-- **Fluxo de trabalho** — Como o projeto é desenvolvido no dia a dia.
-- **Comandos úteis** — Cola prática para operar o sistema.
-- **Organização dos textos** — Como os dados são preparados.
-- **Conceitos fundamentais** — Explicações didáticas dos termos técnicos.
-- **Registros técnicos** — Diário cronológico da evolução.
-- **Roadmap** — Próximos passos e ideias futuras.
+### 🔹 Visão Geral
+
+- [01 — Motivação](01-motivacao.html)
+- [02 — Visão geral do projeto](02-visao-geral.html)
+- [03 — Evolução do projeto](03-evolucao-do-projeto.html)
+- [04 — Arquitetura](04-arquitetura.html)
+
+### 🔹 Desenvolvimento
+
+- [05 — Ferramentas](05-ferramentas.html)
+- [06 — Fluxo de trabalho](06-fluxo-de-trabalho.html)
+- [07 — Comandos úteis](07-comandos-uteis.html)
+- [08 — Organização dos textos](08-organizacao-dos-textos.html)
+
+### 🔹 Planejamento
+
+- [09 — Roadmap](09-roadmap.html)
+
+---
+
+## 🧠 Conceitos fundamentais
+
+- [Sistemas operacionais](conceitos/01-sistemas-operacionais.html)
+- [Ferramentas de desenvolvimento](conceitos/02-ferramentas-de-desenvolvimento.html)
+- [Servidores e deploy](conceitos/03-servidores-e-deploy.html)
+- [Inteligência artificial](conceitos/04-inteligencia-artificial.html)
+- [Modelos e LLMs](conceitos/05-modelos-e-llms.html)
+- [Embeddings](conceitos/06-embeddings.html)
+- [Busca semântica](conceitos/07-busca-semantica.html)
+- [Pipeline do ZenBot](conceitos/08-pipeline-do-zenbot.html)
 
 ---
 
