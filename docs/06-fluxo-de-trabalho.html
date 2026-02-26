@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZenBot Docs — ZenBot Docs</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+      color: #1f2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 1.2rem 2rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header a {
+      color: #dbeafe;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, h4 {
+      color: #1e3a8a;
+      margin-top: 2rem;
+    }
+
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.25rem; }
+
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    code {
+      background: #eef2ff;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    blockquote {
+      border-left: 4px solid #2563eb;
+      padding-left: 1rem;
+      color: #475569;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    nav {
+      margin-bottom: 1.5rem;
+    }
+
+    nav a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📘 Documentação ZenBot</h1>
+  <a href="index.html">← Voltar ao índice</a>
+</header>
+
+<main>
+<h1 id="fluxo-de-trabalho-do-projeto-zenbot">06 – Fluxo de Trabalho do
+Projeto ZenBot</h1>
+<p>Este documento descreve o <strong>passo a passo básico do trabalho
+diário no projeto ZenBot</strong>, desde o desenvolvimento local até o
+deploy em produção.</p>
+<p>O objetivo é manter um fluxo simples, previsível e organizado.</p>
+<hr />
+<h2 id="visão-geral-do-fluxo">1. Visão Geral do Fluxo</h2>
+<p>O ciclo básico de trabalho segue esta sequência: Planejar → Codar →
+Testar Local → Versionar → Publicar → Testar Produção</p>
+<hr />
+<h2 id="desenvolvimento-local">2. Desenvolvimento Local</h2>
+<p>Nesta etapa, todo o trabalho acontece na máquina local.</p>
+<p>Principais atividades:</p>
+<ul>
+<li>Criar ou modificar código.</li>
+<li>Ajustar scripts.</li>
+<li>Atualizar textos e dados.</li>
+<li>Organizar a documentação.</li>
+</ul>
+<p>Ferramentas principais:</p>
+<ul>
+<li>Editor de código</li>
+<li>Terminal</li>
+<li>Python</li>
+<li>Ambiente virtual (venv)</li>
+</ul>
+<hr />
+<h2 id="testes-locais">3. Testes Locais</h2>
+<p>Antes de publicar qualquer alteração, o sistema é testado
+localmente.</p>
+<p>Principais formas de teste:</p>
+<ul>
+<li>Execução direta via terminal.</li>
+<li>Uso de <code>curl</code> para simular requisições HTTP.</li>
+<li>Testes via navegador.</li>
+<li>Exposição temporária com ngrok.</li>
+</ul>
+<p>Objetivo:</p>
+<ul>
+<li>Garantir que tudo funciona antes de publicar.</li>
+</ul>
+<hr />
+<h2 id="versionamento-com-git">4. Versionamento com Git</h2>
+<p>Após os testes locais:</p>
+<ol type="1">
+<li>Os arquivos são adicionados ao Git.</li>
+<li>Um commit é criado com uma mensagem clara.</li>
+<li>As alterações são enviadas ao GitHub.</li>
+</ol>
+<p>Objetivo:</p>
+<ul>
+<li>Manter histórico.</li>
+<li>Garantir backup.</li>
+<li>Organizar evolução do projeto.</li>
+</ul>
+<hr />
+<h2 id="deploy-no-render">5. Deploy no Render</h2>
+<p>Com o código atualizado no GitHub, o Render:</p>
+<ul>
+<li>Detecta automaticamente mudanças.</li>
+<li>Executa o processo de build.</li>
+<li>Publica a nova versão.</li>
+</ul>
+<p>Objetivo:</p>
+<ul>
+<li>Tornar as alterações acessíveis publicamente.</li>
+</ul>
+<hr />
+<h2 id="testes-em-produção">6. Testes em Produção</h2>
+<p>Após o deploy:</p>
+<ul>
+<li>Testes são feitos diretamente no endereço público.</li>
+<li>Logs são monitorados.</li>
+<li>Possíveis erros são corrigidos.</li>
+</ul>
+<hr />
+<h2 id="registro-das-evoluções">7. Registro das Evoluções</h2>
+<p>Sempre que possível, as mudanças importantes são:</p>
+<ul>
+<li>Documentadas em Markdown.</li>
+<li>Registradas na pasta <code>docs/</code>.</li>
+<li>Incluídas no histórico do projeto.</li>
+</ul>
+<hr />
+<h2 id="princípios-do-fluxo-de-trabalho">8. Princípios do Fluxo de
+Trabalho</h2>
+<ul>
+<li>Simplicidade<br />
+</li>
+<li>Clareza<br />
+</li>
+<li>Organização<br />
+</li>
+<li>Aprendizado contínuo<br />
+</li>
+<li>Evolução gradual</li>
+</ul>
+<hr />
+<h2 id="conclusão">9. Conclusão</h2>
+<p>Este fluxo de trabalho permite que o ZenBot evolua de forma
+<strong>organizada, segura e didática</strong>, favorecendo tanto o
+aprendizado quanto a estabilidade do sistema.</p>
+</main>
+
+<footer>
+  Projeto ZenBot · Documentação Viva · Construído com Pandoc + GitHub Pages
+</footer>
+
+</body>
+</html>

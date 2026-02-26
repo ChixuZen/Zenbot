@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZenBot Docs — ZenBot Docs</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+      color: #1f2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 1.2rem 2rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header a {
+      color: #dbeafe;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, h4 {
+      color: #1e3a8a;
+      margin-top: 2rem;
+    }
+
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.25rem; }
+
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    code {
+      background: #eef2ff;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    blockquote {
+      border-left: 4px solid #2563eb;
+      padding-left: 1rem;
+      color: #475569;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    nav {
+      margin-bottom: 1.5rem;
+    }
+
+    nav a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📘 Documentação ZenBot</h1>
+  <a href="index.html">← Voltar ao índice</a>
+</header>
+
+<main>
+<h1 id="organização-dos-textos-no-projeto-zenbot">08 – Organização dos
+Textos no Projeto ZenBot</h1>
+<p>Este documento descreve como os textos são organizados, tratados e
+preparados para se tornarem a <strong>base de conhecimento do
+ZenBot</strong>.</p>
+<p>O objetivo é transformar conteúdos brutos em <strong>informação
+estruturada, pesquisável e semanticamente significativa</strong>.</p>
+<hr />
+<h2 id="visão-geral">1. Visão Geral</h2>
+<p>O ZenBot utiliza textos como fonte principal de conhecimento. Esses
+textos passam por um <strong>processo de transformação</strong>, que
+inclui:</p>
+<p>Texto bruto → Limpeza → Fragmentação → Embeddings → Busca
+Semântica</p>
+<p>Esse fluxo garante que o sistema consiga <strong>entender o
+significado dos conteúdos</strong>, e não apenas localizar palavras.</p>
+<hr />
+<h2 id="tipos-de-textos-utilizados">2. Tipos de Textos Utilizados</h2>
+<p>Os principais formatos são:</p>
+<ul>
+<li>PDFs</li>
+<li>Arquivos de texto (.txt)</li>
+<li>Textos extraídos da web</li>
+<li>Conteúdos preparados manualmente</li>
+</ul>
+<p>Esses materiais ficam organizados principalmente na pasta:
+textos/</p>
+<hr />
+<h2 id="limpeza-dos-textos">3. Limpeza dos Textos</h2>
+<p>Após a extração, os textos passam por um processo de
+<strong>limpeza</strong>, que inclui:</p>
+<ul>
+<li>Remoção de caracteres estranhos.</li>
+<li>Correção de espaçamentos.</li>
+<li>Padronização de parágrafos.</li>
+<li>Eliminação de ruídos visuais.</li>
+</ul>
+<p>Objetivo: deixar o texto <strong>mais claro, contínuo e
+semanticamente consistente</strong>.</p>
+<hr />
+<h2 id="fragmentação-chunks">4. Fragmentação (Chunks)</h2>
+<p>Textos longos são divididos em <strong>pequenos blocos</strong>,
+chamados de <em>chunks</em>.</p>
+<h3 id="por-que-fragmentar">Por que fragmentar?</h3>
+<ul>
+<li>Facilita a indexação.</li>
+<li>Melhora a busca semântica.</li>
+<li>Permite respostas mais precisas.</li>
+</ul>
+<p>Cada chunk representa uma <strong>ideia completa ou um pequeno trecho
+coerente</strong>.</p>
+<hr />
+<h2 id="geração-de-embeddings">5. Geração de Embeddings</h2>
+<p>Cada fragmento é convertido em um <strong>vetor semântico
+(embedding)</strong>.</p>
+<p>Embeddings são <strong>representações matemáticas do significado dos
+textos</strong>, permitindo que o sistema:</p>
+<ul>
+<li>Compare ideias.</li>
+<li>Meça similaridade.</li>
+<li>Realize busca por sentido, e não apenas por palavras.</li>
+</ul>
+<hr />
+<h2 id="armazenamento-dos-dados">6. Armazenamento dos Dados</h2>
+<p>Os dados gerados são organizados principalmente em: data/</p>
+<p>Contendo:</p>
+<ul>
+<li>Vetores de embeddings.</li>
+<li>Índices de busca.</li>
+<li>Arquivos auxiliares para desempenho.</li>
+</ul>
+<hr />
+<h2 id="pipeline-de-preparação-dos-textos">7. Pipeline de Preparação dos
+Textos</h2>
+<p>O processo completo segue a sequência:</p>
+<ol type="1">
+<li>Extração do texto.</li>
+<li>Limpeza.</li>
+<li>Fragmentação.</li>
+<li>Geração dos embeddings.</li>
+<li>Armazenamento.</li>
+<li>Indexação para busca.</li>
+</ol>
+<p>Este conjunto de etapas forma o <strong>pipeline de preparação do
+conhecimento</strong>.</p>
+<hr />
+<h2 id="organização-dos-arquivos">8. Organização dos Arquivos</h2>
+<p>A separação clara entre:</p>
+<ul>
+<li>Textos brutos</li>
+<li>Textos limpos</li>
+<li>Fragmentos</li>
+<li>Dados vetoriais</li>
+</ul>
+<p>permite:</p>
+<ul>
+<li>Facilidade de manutenção.</li>
+<li>Reprocessamento simples.</li>
+<li>Evolução contínua da base de conhecimento.</li>
+</ul>
+<hr />
+<h2 id="princípios-da-organização">9. Princípios da Organização</h2>
+<ul>
+<li>Clareza<br />
+</li>
+<li>Simplicidade<br />
+</li>
+<li>Modularidade<br />
+</li>
+<li>Reprodutibilidade<br />
+</li>
+<li>Qualidade semântica</li>
+</ul>
+<hr />
+<h2 id="conclusão">10. Conclusão</h2>
+<p>A organização dos textos é o <strong>coração do ZenBot</strong>. Um
+bom preparo dos dados garante:</p>
+<ul>
+<li>Respostas melhores.</li>
+<li>Maior coerência.</li>
+<li>Melhor experiência para o usuário.</li>
+<li>Base sólida para evolução futura.</li>
+</ul>
+</main>
+
+<footer>
+  Projeto ZenBot · Documentação Viva · Construído com Pandoc + GitHub Pages
+</footer>
+
+</body>
+</html>
