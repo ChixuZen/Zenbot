@@ -13,6 +13,15 @@ O ZenBot segue uma arquitetura modular, organizada em camadas, com o objetivo de
 - Permitir evolução e manutenção contínua.
 
 De forma resumida, o fluxo principal é:
+
+Usuário → API Web → Busca Semântica → Geração de Resposta → Usuário
+
+---
+
+## 2. Estrutura Geral de Pastas
+
+A estrutura principal do projeto é:
+```text
 zenbot/
 ├── core/
 ├── data/
@@ -22,6 +31,7 @@ zenbot/
 ├── web.py
 ├── zen.py
 └── Makefile
+```
 
 Cada pasta possui uma função específica dentro do sistema.
 
@@ -46,11 +56,12 @@ Arquivos principais:
 ## 4. Camada de Processamento Central (core)
 
 A pasta `core/` contém o núcleo lógico do ZenBot.
+```text
 core/
 ├── embeddings.py
 ├── search.py
 └── engine.py
-
+```
 
 ### Função de cada módulo:
 
@@ -124,3 +135,4 @@ Esses scripts formam o **pipeline de preparação do conhecimento**.
 ## 9. Conclusão
 
 A arquitetura do ZenBot foi pensada não apenas para funcionar, mas também para **ensinar**, permitindo que qualquer pessoa possa compreender seu funcionamento interno e contribuir com melhorias.
+Quando quiser, seguimos no mesmo ritmo calmo com:

@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -110,7 +117,148 @@
 </header>
 
 <main>
-
+<h1 id="busca-semântica">Busca Semântica</h1>
+<p>Este capítulo explica o que é <strong>busca semântica</strong>, como
+ela funciona e por que ela transforma completamente a qualidade das
+respostas do ZenBot.</p>
+<hr />
+<h2 id="o-que-é-busca-semântica">🔍 O que é busca semântica?</h2>
+<p>Busca semântica é uma técnica que encontra informações <strong>pelo
+significado</strong>, não apenas pelas palavras.</p>
+<p>Ela responde à pergunta:</p>
+<blockquote>
+<p>O que a pessoa quer dizer, e não exatamente o que ela escreveu?</p>
+</blockquote>
+<hr />
+<h2 id="diferença-entre-busca-tradicional-e-semântica">📚 Diferença
+entre busca tradicional e semântica</h2>
+<h3 id="busca-tradicional-por-palavras-chave">Busca tradicional (por
+palavras-chave)</h3>
+<ul>
+<li>Procura termos exatos.</li>
+<li>Funciona bem para pesquisas técnicas simples.</li>
+<li>Falha quando a pergunta é vaga, subjetiva ou filosófica.</li>
+</ul>
+<p>Exemplo:</p>
+<blockquote>
+<p>“Como ter paz interior?”</p>
+</blockquote>
+<p>Se não existir exatamente essa frase no texto, o sistema pode
+<strong>não encontrar nada</strong>.</p>
+<hr />
+<h3 id="busca-semântica-por-significado">Busca semântica (por
+significado)</h3>
+<ul>
+<li>Procura ideias, conceitos e intenções.</li>
+<li>Entende contexto.</li>
+<li>Encontra respostas mesmo sem coincidência literal.</li>
+</ul>
+<p>Ela pode encontrar textos sobre:</p>
+<ul>
+<li>meditação</li>
+<li>silêncio</li>
+<li>atenção plena</li>
+<li>desapego</li>
+<li>respiração consciente</li>
+</ul>
+<hr />
+<h2 id="como-a-busca-semântica-funciona">🧠 Como a busca semântica
+funciona?</h2>
+<p>Ela se baseia em <strong>embeddings</strong>.</p>
+<p>Fluxo básico:</p>
+<ol type="1">
+<li>Todo texto é convertido em vetores numéricos.</li>
+<li>A pergunta do usuário também vira um vetor.</li>
+<li>O sistema mede a distância entre os vetores.</li>
+<li>Os textos mais próximos são selecionados.</li>
+</ol>
+<hr />
+<h2 id="medindo-similaridade">📐 Medindo similaridade</h2>
+<p>A métrica mais comum é:</p>
+<ul>
+<li><strong>similaridade do cosseno</strong></li>
+</ul>
+<p>Ela mede o ângulo entre dois vetores.</p>
+<p>Resultado:</p>
+<ul>
+<li>Próximo de 1 → muito semelhante</li>
+<li>Próximo de 0 → sem relação</li>
+</ul>
+<hr />
+<h2 id="como-o-zenbot-implementa-a-busca-semântica">⚙️ Como o ZenBot
+implementa a busca semântica?</h2>
+<p>O ZenBot segue este pipeline: Textos → fragmentação → embeddings →
+armazenamento vetorial Pergunta → embedding → busca → seleção →
+resposta</p>
+<p>Ou, em palavras:</p>
+<ol type="1">
+<li>Divide livros e textos em pequenos trechos</li>
+<li>Gera embeddings para cada trecho</li>
+<li>Armazena tudo</li>
+<li>Quando recebe uma pergunta:
+<ul>
+<li>Calcula o embedding da pergunta</li>
+<li>Busca os vetores mais próximos</li>
+<li>Recupera os trechos relevantes</li>
+<li>Envia ao modelo de linguagem para gerar a resposta</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="por-que-isso-melhora-tanto-as-respostas">🧩 Por que isso melhora
+tanto as respostas?</h2>
+<p>Porque o modelo <strong>não precisa inventar</strong>.</p>
+<p>Ele responde <strong>com base nos textos reais</strong>.</p>
+<p>Isso garante:</p>
+<ul>
+<li>Fidelidade ao conteúdo</li>
+<li>Coerência filosófica</li>
+<li>Profundidade conceitual</li>
+<li>Redução de alucinações</li>
+</ul>
+<hr />
+<h2 id="limitações-da-busca-semântica">🛑 Limitações da busca
+semântica</h2>
+<p>Ela ainda depende:</p>
+<ul>
+<li>Da qualidade dos textos</li>
+<li>Da boa fragmentação</li>
+<li>De bons embeddings</li>
+<li>Do tamanho da base</li>
+</ul>
+<p>Se os textos forem pobres, a resposta será pobre.</p>
+<hr />
+<h2 id="metáfora-zen">🧘 Metáfora Zen</h2>
+<p>Busca semântica é como:</p>
+<blockquote>
+<p>Um monge que escuta a pergunta além das palavras.</p>
+</blockquote>
+<p>Ele percebe a <strong>intenção silenciosa por trás da
+frase</strong>.</p>
+<hr />
+<h2 id="busca-semântica-llm-inteligência-prática">🧠 Busca semântica +
+LLM = Inteligência prática</h2>
+<p>Sem busca semântica:</p>
+<blockquote>
+<p>LLM gera textos bonitos, mas pode errar.</p>
+</blockquote>
+<p>Sem LLM:</p>
+<blockquote>
+<p>Busca semântica encontra textos, mas não conversa.</p>
+</blockquote>
+<p>Juntos:</p>
+<blockquote>
+<p>O sistema entende, busca, organiza e responde.</p>
+</blockquote>
+<hr />
+<h2 id="conceito-chave">📌 Conceito-chave</h2>
+<blockquote>
+<p>Busca semântica é o elo entre significado humano e recuperação
+inteligente da informação.</p>
+</blockquote>
+<hr />
+<h2 id="próximo-capítulo">🔗 Próximo capítulo</h2>
+<p>👉 <strong>08 — Pipeline do ZenBot</strong></p>
+<p>Aqui veremos todo o sistema funcionando como um organismo único.</p>
 </main>
 
 <footer>

@@ -32,34 +32,35 @@ Criar um chatbot baseado em inteligência artificial capaz de responder pergunta
 
 ### 🔹 Visão Geral
 
-- [01 — Motivação](01-motivacao.html)
-- [02 — Visão geral do projeto](02-visao-geral.html)
-- [03 — Evolução do projeto](03-evolucao-do-projeto.html)
-- [04 — Arquitetura](04-arquitetura.html)
+- 🚀 [Motivação](01-motivacao.html)
+- 🔭 [Visão geral do projeto](02-visao-geral.html)
+- 📈 [Evolução do projeto](03-evolucao-do-projeto.html)
+- 🏛️ [Arquitetura](04-arquitetura.html)
 
 ### 🔹 Desenvolvimento
 
-- [05 — Ferramentas](05-ferramentas.html)
-- [06 — Fluxo de trabalho](06-fluxo-de-trabalho.html)
-- [07 — Comandos úteis](07-comandos-uteis.html)
-- [08 — Organização dos textos](08-organizacao-dos-textos.html)
+- 🧰 [Ferramentas](05-ferramentas.html)
+- 🔄 [Fluxo de trabalho](06-fluxo-de-trabalho.html)
+- 💻 [Comandos úteis](07-comandos-uteis.html)
+- 📑 [Organização dos textos](08-organizacao-dos-textos.html)
 
 ### 🔹 Planejamento
 
-- [09 — Roadmap](09-roadmap.html)
+- 🗺️ [Roadmap](09-roadmap.html)
 
 ---
 
 ## 🧠 Conceitos fundamentais
 
-- [Sistemas operacionais](conceitos/01-sistemas-operacionais.html)
-- [Ferramentas de desenvolvimento](conceitos/02-ferramentas-de-desenvolvimento.html)
-- [Servidores e deploy](conceitos/03-servidores-e-deploy.html)
-- [Inteligência artificial](conceitos/04-inteligencia-artificial.html)
-- [Modelos e LLMs](conceitos/05-modelos-e-llms.html)
-- [Embeddings](conceitos/06-embeddings.html)
-- [Busca semântica](conceitos/07-busca-semantica.html)
-- [Pipeline do ZenBot](conceitos/08-pipeline-do-zenbot.html)
+- 🖥️ [Sistemas operacionais](conceitos/01-sistemas-operacionais.html)
+- 🛠️ [Ferramentas de desenvolvimento](conceitos/02-ferramentas-de-desenvolvimento.html)
+- 🌐 [Servidores e deploy](conceitos/03-servidores-e-deploy.html)
+- 🤖 [Inteligência artificial](conceitos/04-inteligencia-artificial.html)
+- 🧠 [Modelos e LLMs](conceitos/05-modelos-e-llms.html)
+- 🧬 [Embeddings](conceitos/06-embeddings.html)
+- 🔍 [Busca semântica](conceitos/07-busca-semantica.html)
+- 🧩 [Pipeline do ZenBot](conceitos/08-pipeline-do-zenbot.html)
+- ☯️ [Metáfora Zen — A Arquitetura Mental do ZenBot](conceitos/09-metafora-zen.html)
 
 ---
 

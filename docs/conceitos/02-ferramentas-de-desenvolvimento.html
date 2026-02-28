@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -110,7 +117,138 @@
 </header>
 
 <main>
-
+<h1 id="ferramentas-de-desenvolvimento">Ferramentas de
+Desenvolvimento</h1>
+<p>Ferramentas de desenvolvimento são os programas que permitem criar,
+testar, organizar, versionar, documentar e publicar software.</p>
+<p>Elas formam o <strong>ambiente de trabalho do desenvolvedor</strong>
+— assim como um conjunto de ferramentas define a qualidade e eficiência
+de um artesão.</p>
+<hr />
+<h2 id="por-que-elas-são-tão-importantes">🎯 Por que elas são tão
+importantes?</h2>
+<p>Boas ferramentas:</p>
+<ul>
+<li>Aumentam a produtividade</li>
+<li>Reduzem erros</li>
+<li>Facilitam testes e correções</li>
+<li>Permitem colaboração em equipe</li>
+<li>Tornam projetos grandes organizáveis</li>
+</ul>
+<p>Sem ferramentas adequadas, até tarefas simples se tornam lentas,
+confusas e propensas a falhas.</p>
+<hr />
+<h2 id="analogia-simples">🧠 Analogia simples</h2>
+<p>Imagine tentar construir uma casa apenas com as mãos.</p>
+<p>Agora compare isso com ter:</p>
+<ul>
+<li>Martelo</li>
+<li>Serra</li>
+<li>Nível</li>
+<li>Trena</li>
+<li>Furadeira</li>
+</ul>
+<p>As ferramentas <strong>não constroem sozinhas</strong>, mas
+<strong>multiplicam sua capacidade</strong>.</p>
+<hr />
+<h2 id="principais-categorias-de-ferramentas">🧰 Principais categorias
+de ferramentas</h2>
+<h3 id="editores-de-código">1. Editores de código</h3>
+<p>Permitem escrever, organizar e navegar pelo código.</p>
+<p>Exemplos: - VS Code - PyCharm - Sublime Text - Vim - Nano</p>
+<p>No ZenBot utilizamos principalmente:</p>
+<p>👉 <strong>VS Code</strong></p>
+<p>Por oferecer: - Autocompletar inteligente - Organização por pastas -
+Integração com Git - Terminal integrado - Extensões poderosas</p>
+<hr />
+<h3 id="terminal-e-shell">2. Terminal e Shell</h3>
+<p>O terminal permite controlar o computador por meio de comandos de
+texto.</p>
+<p>Exemplos: - Bash - Zsh - Fish</p>
+<p>No ZenBot, usamos:</p>
+<p>👉 <strong>Terminal + Zsh (macOS)</strong></p>
+<p>Ele é essencial para: - Rodar scripts - Instalar dependências -
+Executar servidores - Automatizar tarefas</p>
+<hr />
+<h3 id="controle-de-versão">3. Controle de versão</h3>
+<p>Permite registrar todas as alterações do projeto, possibilitando:</p>
+<ul>
+<li>Voltar no tempo</li>
+<li>Trabalhar em equipe</li>
+<li>Controlar versões</li>
+<li>Evitar perda de código</li>
+</ul>
+<p>Ferramenta padrão:</p>
+<p>👉 <strong>Git</strong></p>
+<p>Plataforma de hospedagem:</p>
+<p>👉 <strong>GitHub</strong></p>
+<hr />
+<h3 id="linguagens-e-runtimes">4. Linguagens e runtimes</h3>
+<p>São os ambientes onde o código realmente roda.</p>
+<p>No ZenBot usamos principalmente:</p>
+<ul>
+<li><strong>Python</strong> — linguagem principal do backend</li>
+<li><strong>HTML / CSS</strong> — documentação e portal</li>
+<li><strong>Shell Script</strong> — automações</li>
+<li><strong>Makefile</strong> — orquestração de comandos</li>
+</ul>
+<hr />
+<h3 id="gerenciadores-de-dependências">5. Gerenciadores de
+dependências</h3>
+<p>Servem para instalar bibliotecas externas.</p>
+<p>No Python usamos:</p>
+<p>👉 <strong>pip + requirements.txt</strong></p>
+<hr />
+<h3 id="ferramentas-de-publicação-deploy">6. Ferramentas de publicação
+(deploy)</h3>
+<p>Permitem colocar o sistema no ar.</p>
+<p>No projeto:</p>
+<ul>
+<li><strong>Render</strong> → backend do ZenBot</li>
+<li><strong>GitHub Pages</strong> → documentação pública</li>
+</ul>
+<hr />
+<h2 id="ferramentas-usadas-no-zenbot">🔗 Ferramentas usadas no
+ZenBot</h2>
+<p>Resumo prático:</p>
+<ul>
+<li>VS Code → edição de código</li>
+<li>Terminal → execução de comandos</li>
+<li>Git → versionamento</li>
+<li>GitHub → hospedagem de código</li>
+<li>Python → motor do sistema</li>
+<li>Pandoc → conversão Markdown → HTML</li>
+<li>Render → deploy do backend</li>
+<li>GitHub Pages → deploy da documentação</li>
+</ul>
+<hr />
+<h2 id="como-tudo-se-conecta">🧩 Como tudo se conecta</h2>
+<p>O fluxo típico é:</p>
+<ol type="1">
+<li>Escrever código → VS Code<br />
+</li>
+<li>Executar → Terminal<br />
+</li>
+<li>Versionar → Git<br />
+</li>
+<li>Publicar → GitHub<br />
+</li>
+<li>Converter docs → Pandoc<br />
+</li>
+<li>Hospedar docs → GitHub Pages<br />
+</li>
+<li>Hospedar backend → Render</li>
+</ol>
+<p>Isso cria um <strong>ecossistema completo de desenvolvimento
+profissional.</strong></p>
+<hr />
+<h2 id="conceito-chave">📌 Conceito-chave</h2>
+<blockquote>
+<p>Ferramentas não substituem o raciocínio, mas <strong>amplificam a
+capacidade criativa e técnica do desenvolvedor.</strong></p>
+</blockquote>
+<p>No ZenBot, cada ferramenta foi escolhida para <strong>ensinar,
+organizar e escalar conhecimento.</strong></p>
 </main>
 
 <footer>

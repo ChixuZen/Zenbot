@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -110,7 +117,212 @@
 </header>
 
 <main>
-
+<h1 id="pipeline-do-zenbot">Pipeline do ZenBot</h1>
+<p>Este capítulo descreve <strong>todo o fluxo de funcionamento do
+ZenBot</strong>, desde a preparação dos textos até a geração da resposta
+final.</p>
+<p>Aqui você verá o ZenBot como um <strong>organismo completo</strong>,
+e não como partes soltas.</p>
+<hr />
+<h2 id="o-que-é-um-pipeline">🧠 O que é um pipeline?</h2>
+<p>Pipeline é uma <strong>cadeia organizada de etapas</strong>,
+onde:</p>
+<blockquote>
+<p>A saída de uma etapa se torna a entrada da próxima.</p>
+</blockquote>
+<p>Em sistemas de IA, o pipeline define:</p>
+<ul>
+<li>Como os dados entram</li>
+<li>Como são processados</li>
+<li>Como viram respostas</li>
+</ul>
+<hr />
+<h2 id="objetivo-do-pipeline-do-zenbot">🎯 Objetivo do pipeline do
+ZenBot</h2>
+<p>Transformar:</p>
+<blockquote>
+<p>Livros + textos + perguntas humanas</p>
+</blockquote>
+<p>em:</p>
+<blockquote>
+<p>Respostas coerentes, profundas e contextualizadas.</p>
+</blockquote>
+<hr />
+<h2 id="visão-geral-do-pipeline">🧩 Visão geral do pipeline</h2>
+<p>Textos → Limpeza → Fragmentação → Embeddings → Armazenamento Pergunta
+→ Embedding → Busca Semântica → Seleção → LLM → Resposta</p>
+<p>Ou em forma visual: Usuário ↓ Pergunta ↓ Embedding ↓ Busca Semântica
+↓ Textos Relevantes ↓ LLM (modelo de linguagem) ↓ Resposta Final</p>
+<hr />
+<h2 id="etapa-1-coleta-dos-textos">🔹 Etapa 1 — Coleta dos textos</h2>
+<p>Fontes:</p>
+<ul>
+<li>Livros em PDF</li>
+<li>Textos digitais</li>
+<li>Arquivos Markdown</li>
+<li>Anotações</li>
+</ul>
+<p>Objetivo:</p>
+<blockquote>
+<p>Construir uma base confiável de conhecimento.</p>
+</blockquote>
+<hr />
+<h2 id="etapa-2-limpeza-dos-textos">🔹 Etapa 2 — Limpeza dos textos</h2>
+<p>Scripts utilizados:</p>
+<ul>
+<li><code>limpar_texto.py</code></li>
+<li><code>extrair_pdf.py</code></li>
+</ul>
+<p>O que acontece:</p>
+<ul>
+<li>Remoção de quebras desnecessárias</li>
+<li>Correção de caracteres estranhos</li>
+<li>Eliminação de ruído visual</li>
+<li>Padronização</li>
+</ul>
+<p>Resultado:</p>
+<blockquote>
+<p>Texto limpo, contínuo e processável.</p>
+</blockquote>
+<hr />
+<h2 id="etapa-3-fragmentação-chunking">🔹 Etapa 3 — Fragmentação
+(chunking)</h2>
+<p>Script:</p>
+<ul>
+<li><code>fragmentar_texto.py</code></li>
+</ul>
+<p>O texto é dividido em pequenos blocos chamados
+<strong>chunks</strong>.</p>
+<p>Por quê?</p>
+<ul>
+<li>Modelos trabalham melhor com blocos pequenos</li>
+<li>Permite busca mais precisa</li>
+<li>Evita perda de contexto</li>
+</ul>
+<p>Tamanho típico:</p>
+<ul>
+<li>300 a 800 caracteres</li>
+</ul>
+<hr />
+<h2 id="etapa-4-geração-de-embeddings">🔹 Etapa 4 — Geração de
+embeddings</h2>
+<p>Script:</p>
+<ul>
+<li><code>embeddings.py</code></li>
+</ul>
+<p>Cada chunk é convertido em um <strong>vetor numérico</strong>.</p>
+<p>Resultado: texto → embedding → vetor</p>
+<p>Esses vetores representam o <strong>significado matemático</strong>
+do conteúdo.</p>
+<hr />
+<h2 id="etapa-5-armazenamento-vetorial">🔹 Etapa 5 — Armazenamento
+vetorial</h2>
+<p>Os embeddings são armazenados em:</p>
+<ul>
+<li>Arquivos <code>.json</code></li>
+<li>Estruturas internas</li>
+<li>Bases vetoriais simples</li>
+</ul>
+<p>Arquivo típico:</p>
+<ul>
+<li><code>embeddings.json</code></li>
+</ul>
+<p>Função:</p>
+<blockquote>
+<p>Permitir busca semântica ultrarrápida.</p>
+</blockquote>
+<hr />
+<h2 id="etapa-6-recebimento-da-pergunta">🔹 Etapa 6 — Recebimento da
+pergunta</h2>
+<p>Via:</p>
+<ul>
+<li>API (interface de comunicação entre sistemas)</li>
+<li>Endpoint <code>/ask</code></li>
+<li>Interface web</li>
+</ul>
+<p>Exemplo:</p>
+<p>```json { “question”: “O que é mente zen?” } ## 🔹 Etapa 7 — Geração
+do embedding da pergunta</p>
+<p>Quando o usuário envia uma pergunta, o ZenBot <strong>transforma essa
+pergunta em um vetor numérico</strong>, usando o mesmo modelo de
+embeddings aplicado aos textos.</p>
+<p>Isso garante que:</p>
+<blockquote>
+<p>Pergunta e textos estejam representados no <strong>mesmo espaço
+matemático</strong>.</p>
+</blockquote>
+<p>Exemplo conceitual: “O que é mente zen?” → embedding → vetor
+numérico</p>
+<p>Esse vetor representa o <strong>significado da pergunta</strong>, não
+apenas suas palavras.</p>
+<hr />
+<h2 id="etapa-8-busca-semântica">🔹 Etapa 8 — Busca semântica</h2>
+<p>Script principal:</p>
+<ul>
+<li><code>search.py</code></li>
+</ul>
+<p>O vetor da pergunta é comparado com <strong>todos os vetores dos
+textos armazenados</strong>.</p>
+<p>O sistema calcula a similaridade entre eles e seleciona:</p>
+<blockquote>
+<p>Os trechos <strong>mais semanticamente próximos</strong>.</p>
+</blockquote>
+<p>Normalmente são retornados:</p>
+<ul>
+<li>Entre <strong>3 e 8 blocos de texto relevantes</strong></li>
+</ul>
+<p>Isso garante que a resposta seja baseada <strong>em conteúdo
+real</strong>, e não em improvisação.</p>
+<hr />
+<h2 id="etapa-9-montagem-do-contexto">🔹 Etapa 9 — Montagem do
+contexto</h2>
+<p>Os trechos encontrados são:</p>
+<ul>
+<li>Organizados</li>
+<li>Concatenados</li>
+<li>Preparados em forma de contexto</li>
+</ul>
+<p>Esse contexto é enviado ao modelo de linguagem junto com a
+pergunta.</p>
+<p>Assim, o LLM recebe:</p>
+<ul>
+<li>A pergunta original</li>
+<li>Os textos mais relevantes</li>
+<li>O prompt orientador do ZenBot</li>
+</ul>
+<p>Isso cria um <strong>ambiente informacional rico e
+confiável</strong>.</p>
+<hr />
+<h2 id="etapa-10-geração-da-resposta">🔹 Etapa 10 — Geração da
+resposta</h2>
+<p>Script principal:</p>
+<ul>
+<li><code>engine.py</code></li>
+</ul>
+<p>O modelo de linguagem (LLM) recebe:</p>
+<ul>
+<li>Pergunta</li>
+<li>Contexto recuperado</li>
+<li>Prompt do ZenBot</li>
+</ul>
+<p>E então:</p>
+<blockquote>
+<p>Gera uma resposta clara, profunda, didática e coerente com os
+textos-base.</p>
+</blockquote>
+<p>Essa etapa transforma <strong>informação bruta em linguagem humana
+compreensível</strong>.</p>
+<hr />
+<h2 id="etapa-11-retorno-da-resposta-ao-usuário">🔹 Etapa 11 — Retorno
+da resposta ao usuário</h2>
+<p>A resposta final é entregue por meio de:</p>
+<ul>
+<li>API (JSON)</li>
+<li>Interface web</li>
+<li>Endpoint <code>/ask</code></li>
+</ul>
+<p>Exemplo:</p>
+<p>```json { “answer”: “A mente zen é o estado de atenção plena…” }</p>
 </main>
 
 <footer>

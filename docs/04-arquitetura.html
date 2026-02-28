@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -123,9 +130,21 @@ objetivo de:</p>
 <li>Tornar o código mais limpo.</li>
 <li>Permitir evolução e manutenção contínua.</li>
 </ul>
-<p>De forma resumida, o fluxo principal é: zenbot/ ├── core/ ├── data/
-├── textos/ ├── scripts/ ├── docs/ ├── web.py ├── zen.py └──
-Makefile</p>
+<p>De forma resumida, o fluxo principal é:</p>
+<p>Usuário → API Web → Busca Semântica → Geração de Resposta →
+Usuário</p>
+<hr />
+<h2 id="estrutura-geral-de-pastas">2. Estrutura Geral de Pastas</h2>
+<p>A estrutura principal do projeto é:</p>
+<pre class="text"><code>zenbot/
+├── core/
+├── data/
+├── textos/
+├── scripts/
+├── docs/
+├── web.py
+├── zen.py
+└── Makefile</code></pre>
 <p>Cada pasta possui uma função específica dentro do sistema.</p>
 <hr />
 <h2 id="camada-de-interface-api-web">3. Camada de Interface (API
@@ -142,8 +161,11 @@ Web</strong>, construída com FastAPI (framework web em Python).</p>
 <hr />
 <h2 id="camada-de-processamento-central-core">4. Camada de Processamento
 Central (core)</h2>
-<p>A pasta <code>core/</code> contém o núcleo lógico do ZenBot. core/
-├── embeddings.py ├── search.py └── engine.py</p>
+<p>A pasta <code>core/</code> contém o núcleo lógico do ZenBot.</p>
+<pre class="text"><code>core/
+├── embeddings.py
+├── search.py
+└── engine.py</code></pre>
 <h3 id="função-de-cada-módulo">Função de cada módulo:</h3>
 <ul>
 <li><p><strong>embeddings.py</strong><br />
@@ -214,8 +236,8 @@ Funcionamento</h2>
 <h2 id="conclusão">9. Conclusão</h2>
 <p>A arquitetura do ZenBot foi pensada não apenas para funcionar, mas
 também para <strong>ensinar</strong>, permitindo que qualquer pessoa
-possa compreender seu funcionamento interno e contribuir com
-melhorias.</p>
+possa compreender seu funcionamento interno e contribuir com melhorias.
+Quando quiser, seguimos no mesmo ritmo calmo com:</p>
 </main>
 
 <footer>

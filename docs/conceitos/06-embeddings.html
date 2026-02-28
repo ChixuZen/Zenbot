@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -110,7 +117,171 @@
 </header>
 
 <main>
-
+<h1 id="embeddings">Embeddings</h1>
+<p>Este capítulo explica o que são <strong>embeddings</strong>, por que
+eles são fundamentais para sistemas modernos de inteligência artificial
+e como são usados no ZenBot para permitir <strong>busca semântica
+real</strong>.</p>
+<hr />
+<h2 id="o-que-são-embeddings">🧠 O que são embeddings?</h2>
+<p>Embeddings são <strong>representações matemáticas do significado dos
+textos</strong>.</p>
+<p>Eles transformam:</p>
+<blockquote>
+<p>Palavras → Frases → Parágrafos → Documentos</p>
+</blockquote>
+<p>em <strong>vetores numéricos</strong>.</p>
+<p>Esses vetores capturam o <strong>sentido</strong>, não apenas as
+palavras.</p>
+<hr />
+<h2 id="o-que-é-um-vetor">🔢 O que é um vetor?</h2>
+<p>Um vetor é uma lista de números, por exemplo: [0.023, -0.91, 0.44,
+0.002, 0.78, …]</p>
+<p>Cada número representa uma <strong>característica semântica
+aprendida</strong>.</p>
+<p>Modelos modernos usam vetores com:</p>
+<ul>
+<li>384 dimensões</li>
+<li>768 dimensões</li>
+<li>1024 dimensões</li>
+<li>1536 dimensões ou mais</li>
+</ul>
+<hr />
+<h2 id="o-que-significa-representar-o-significado">🌍 O que significa
+“representar o significado”?</h2>
+<p>Palavras diferentes podem ter <strong>significado
+parecido</strong>:</p>
+<ul>
+<li>carro<br />
+</li>
+<li>automóvel<br />
+</li>
+<li>veículo</li>
+</ul>
+<p>Nos embeddings, essas palavras ficam <strong>próximas no espaço
+vetorial</strong>.</p>
+<p>Já palavras com significados distantes:</p>
+<ul>
+<li>carro<br />
+</li>
+<li>meditação</li>
+</ul>
+<p>ficam <strong>muito afastadas matematicamente</strong>.</p>
+<hr />
+<h2 id="espaço-vetorial">🗺️ Espaço vetorial</h2>
+<p>Imagine um espaço com milhares de dimensões.</p>
+<p>Cada texto vira <strong>um ponto nesse espaço</strong>.</p>
+<p>Textos com significado parecido:</p>
+<p>→ ficam próximos<br />
+Textos diferentes:</p>
+<p>→ ficam distantes</p>
+<p>Isso permite <strong>medir similaridade matemática</strong>.</p>
+<hr />
+<h2 id="como-se-mede-essa-proximidade">📐 Como se mede essa
+proximidade?</h2>
+<p>A métrica mais comum é:</p>
+<ul>
+<li><strong>similaridade do cosseno</strong></li>
+</ul>
+<p>Ela calcula o ângulo entre dois vetores.</p>
+<p>Resultado:</p>
+<ul>
+<li>1.0 → idênticos</li>
+<li>0.8 → muito semelhantes</li>
+<li>0.5 → relacionados</li>
+<li>0.2 → pouco relacionados</li>
+<li>0.0 → não relacionados</li>
+</ul>
+<hr />
+<h2 id="para-que-embeddings-são-usados">🔍 Para que embeddings são
+usados?</h2>
+<ul>
+<li>Busca semântica</li>
+<li>Recomendação de conteúdo</li>
+<li>Agrupamento de textos</li>
+<li>Classificação automática</li>
+<li>Detecção de similaridade</li>
+<li>Chatbots inteligentes</li>
+</ul>
+<hr />
+<h2 id="como-o-zenbot-usa-embeddings">⚙️ Como o ZenBot usa
+embeddings?</h2>
+<p>O ZenBot:</p>
+<ol type="1">
+<li>Divide os textos em pequenos blocos (chunks)</li>
+<li>Gera embeddings para cada bloco</li>
+<li>Armazena esses vetores</li>
+<li>Quando chega uma pergunta:
+<ul>
+<li>Gera embedding da pergunta</li>
+<li>Compara com todos os vetores</li>
+<li>Encontra os mais próximos</li>
+<li>Recupera os textos correspondentes</li>
+</ul></li>
+<li>Envia esses textos ao LLM</li>
+</ol>
+<hr />
+<h2 id="fluxo-resumido">🔁 Fluxo resumido</h2>
+<p>Texto → Embeddings → Vetores armazenados Pergunta → Embedding →
+Comparação → Textos relevantes → Resposta</p>
+<hr />
+<h2 id="por-que-isso-é-tão-poderoso">🧩 Por que isso é tão
+poderoso?</h2>
+<p>Porque o sistema:</p>
+<ul>
+<li>Não depende de palavras exatas</li>
+<li>Entende o <strong>sentido</strong></li>
+<li>Encontra respostas mesmo se a pergunta for formulada de outra
+forma</li>
+</ul>
+<p>Exemplo:</p>
+<p>Pergunta:<br />
+&gt; Como acalmar a mente?</p>
+<p>Mesmo sem essa frase literal nos textos, o sistema pode
+encontrar:</p>
+<ul>
+<li>meditação</li>
+<li>silêncio</li>
+<li>atenção plena</li>
+<li>respiração consciente</li>
+</ul>
+<hr />
+<h2 id="diferença-entre-busca-tradicional-e-semântica">🛑 Diferença
+entre busca tradicional e semântica</h2>
+<h3 id="busca-tradicional">Busca tradicional:</h3>
+<blockquote>
+<p>Procura palavras exatas.</p>
+</blockquote>
+<h3 id="busca-semântica">Busca semântica:</h3>
+<blockquote>
+<p>Procura significado.</p>
+</blockquote>
+<hr />
+<h2 id="metáfora-zen">🧘 Metáfora Zen</h2>
+<p>Embeddings são como:</p>
+<blockquote>
+<p>Um mapa invisível do significado das palavras.</p>
+</blockquote>
+<p>Eles não veem letras, veem <strong>intenções</strong>.</p>
+<hr />
+<h2 id="embeddings-não-pensam">🧠 Embeddings não pensam</h2>
+<p>Eles não entendem de verdade.</p>
+<p>Eles apenas:</p>
+<blockquote>
+<p>Representam matematicamente padrões estatísticos da linguagem.</p>
+</blockquote>
+<p>Mas isso já é suficiente para criar <strong>sistemas incrivelmente
+inteligentes</strong>.</p>
+<hr />
+<h2 id="conceito-chave">📌 Conceito-chave</h2>
+<blockquote>
+<p>Embeddings são a ponte entre linguagem humana e matemática.</p>
+</blockquote>
+<hr />
+<h2 id="próximo-capítulo">🔗 Próximo capítulo</h2>
+<p>👉 <strong>07 — Busca Semântica</strong></p>
+<p>Aqui veremos como esses vetores são usados para encontrar as
+respostas certas.</p>
 </main>
 
 <footer>

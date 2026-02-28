@@ -50,20 +50,27 @@
     h2 { font-size: 1.6rem; }
     h3 { font-size: 1.25rem; }
 
+    /* Bloco de código (Árvore de pastas e comandos) */
     pre {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.2rem;
+      background: #f1f5f9; 
+      color: #334155;      
+      padding: 1.2rem;
       border-radius: 8px;
+      border: 1px solid #e2e8f0; 
       overflow-x: auto;
       font-size: 0.9rem;
+      line-height: 1.4;    
+      margin: 1.5rem 0;
     }
 
+    /* Código em linha (termos técnicos no texto) */
     code {
-      background: #eef2ff;
-      padding: 0.15rem 0.35rem;
+      background: #f1f5f9;
+      color: #2563eb;      
+      padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-size: 0.9em;
+      font-family: "SFMono-Regular", Consolas, monospace;
     }
 
     blockquote {
@@ -90,18 +97,18 @@
       margin-bottom: 1.5rem;
     }
 
-    nav a {
-      color: #2563eb;
+    a {
       text-decoration: none;
+      color: #2563eb;
       font-weight: 500;
     }
 
-    nav a:hover {
+    a:hover {
       text-decoration: underline;
+      color: #1e40af;
     }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -110,7 +117,177 @@
 </header>
 
 <main>
-
+<h1 id="servidores-e-deploy">Servidores e Deploy</h1>
+<p>Este capítulo explica como um programa sai do seu computador e passa
+a funcionar <strong>para qualquer pessoa na internet</strong>.</p>
+<p>Esse processo envolve dois conceitos fundamentais:</p>
+<ul>
+<li><strong>Servidor</strong></li>
+<li><strong>Deploy</strong></li>
+</ul>
+<hr />
+<h2 id="o-que-é-um-servidor">🌍 O que é um servidor?</h2>
+<p>Um servidor é um computador que fica <strong>ligado 24 horas por
+dia</strong>, conectado à internet, esperando requisições de outros
+computadores.</p>
+<p>Enquanto seu notebook:</p>
+<ul>
+<li>Liga</li>
+<li>Desliga</li>
+<li>Dorme</li>
+<li>Muda de rede</li>
+</ul>
+<p>Um servidor:</p>
+<ul>
+<li>Fica sempre disponível</li>
+<li>Tem IP fixo ou controlado</li>
+<li>Possui conexão estável</li>
+<li>Está preparado para receber milhares de acessos</li>
+</ul>
+<hr />
+<h2 id="analogia-simples">🧠 Analogia simples</h2>
+<p>Imagine um restaurante.</p>
+<ul>
+<li>Seu computador → sua cozinha em casa</li>
+<li>Servidor → restaurante aberto ao público</li>
+</ul>
+<p>Você pode cozinhar em casa, mas <strong>ninguém vem até lá comprar
+comida</strong>.</p>
+<p>Para atender pessoas, você precisa colocar seu serviço <strong>em um
+local público e acessível</strong>.</p>
+<p>Esse local é o <strong>servidor</strong>.</p>
+<hr />
+<h2 id="o-que-é-deploy">🌐 O que é deploy?</h2>
+<p>Deploy é o processo de:</p>
+<blockquote>
+<p><strong>Publicar seu sistema em um servidor para que ele fique
+acessível pela internet.</strong></p>
+</blockquote>
+<p>Em termos práticos, deploy significa:</p>
+<ul>
+<li>Enviar o código para um servidor</li>
+<li>Instalar dependências</li>
+<li>Configurar ambiente</li>
+<li>Iniciar o sistema</li>
+<li>Manter tudo rodando continuamente</li>
+</ul>
+<hr />
+<h2 id="fluxo-clássico-de-deploy">🔁 Fluxo clássico de deploy</h2>
+<ol type="1">
+<li>Desenvolver localmente</li>
+<li>Testar localmente</li>
+<li>Subir o código para o GitHub</li>
+<li>Conectar o servidor ao repositório</li>
+<li>Executar deploy automático</li>
+</ol>
+<hr />
+<h2 id="tipos-de-servidores">🏗️ Tipos de servidores</h2>
+<h3 id="servidor-físico">1. Servidor físico</h3>
+<p>Um computador real dedicado.</p>
+<ul>
+<li>Alto custo</li>
+<li>Manutenção própria</li>
+<li>Controle total</li>
+</ul>
+<hr />
+<h3 id="servidor-virtual-vps-cloud">2. Servidor virtual (VPS /
+Cloud)</h3>
+<p>Um computador virtual rodando em data centers.</p>
+<ul>
+<li>Custo menor</li>
+<li>Escala automática</li>
+<li>Alta disponibilidade</li>
+</ul>
+<p>👉 É o modelo mais usado atualmente.</p>
+<hr />
+<h2 id="plataformas-modernas-de-deploy">☁️ Plataformas modernas de
+deploy</h2>
+<p>Algumas plataformas que simplificam o deploy:</p>
+<ul>
+<li>Render</li>
+<li>Railway</li>
+<li>Vercel</li>
+<li>Fly.io</li>
+<li>DigitalOcean</li>
+<li>AWS</li>
+<li>Google Cloud</li>
+</ul>
+<p>No ZenBot utilizamos:</p>
+<p>👉 <strong>Render</strong></p>
+<hr />
+<h2 id="o-papel-do-render-no-zenbot">🧩 O papel do Render no ZenBot</h2>
+<p>O Render:</p>
+<ul>
+<li>Recebe o código do GitHub</li>
+<li>Instala automaticamente as dependências</li>
+<li>Cria o ambiente Python</li>
+<li>Inicia o servidor FastAPI</li>
+<li>Mantém o serviço ativo 24/7</li>
+</ul>
+<p>Tudo isso <strong>sem necessidade de configurar servidores
+manualmente</strong>.</p>
+<hr />
+<h2 id="como-funciona-o-deploy-do-zenbot">⚙️ Como funciona o deploy do
+ZenBot</h2>
+<p>Fluxo real do projeto: VS Code → Git → GitHub → Render → Internet</p>
+<p>Passo a passo:</p>
+<ol type="1">
+<li>Você altera o código localmente</li>
+<li>Executa: git add . git commit -m “mensagem” git push</li>
+<li>O GitHub recebe o novo código</li>
+<li>O Render detecta automaticamente a mudança</li>
+<li>Um novo deploy é feito</li>
+<li>O ZenBot entra no ar atualizado</li>
+</ol>
+<hr />
+<h2 id="teste-local-x-produção">🧪 Teste local x produção</h2>
+<p>Durante o desenvolvimento: uvicorn web:app –reload</p>
+<p>Durante produção (Render):</p>
+<ul>
+<li>O Render executa o servidor automaticamente</li>
+<li>Usa configurações próprias de performance e segurança</li>
+</ul>
+<hr />
+<h2 id="segurança-básica-em-deploy">🔐 Segurança básica em deploy</h2>
+<p>Alguns cuidados importantes:</p>
+<ul>
+<li>Nunca subir chaves secretas no GitHub</li>
+<li>Usar variáveis de ambiente</li>
+<li>Controlar permissões de acesso</li>
+<li>Monitorar logs do servidor</li>
+</ul>
+<hr />
+<h2 id="github-pages-servidor-da-documentação">🌎 GitHub Pages —
+Servidor da documentação</h2>
+<p>Além do backend, o projeto possui <strong>documentação
+pública</strong> hospedada em:</p>
+<p>👉 <strong>GitHub Pages</strong></p>
+<p>Ele funciona como:</p>
+<ul>
+<li>Um servidor de arquivos HTML</li>
+<li>Hospedagem estática</li>
+<li>Ideal para documentação</li>
+</ul>
+<p>Fluxo: Markdown → Pandoc → HTML → GitHub Pages → Navegador</p>
+<hr />
+<h2 id="conceito-chave">🧠 Conceito-chave</h2>
+<blockquote>
+<p>Deploy é o ritual que transforma um projeto pessoal em um serviço
+público.</p>
+</blockquote>
+<p>É o momento em que o sistema <strong>deixa de ser apenas código e
+passa a existir no mundo real.</strong></p>
+<hr />
+<h2 id="no-zenbot">📌 No ZenBot</h2>
+<p>O uso de Render + GitHub Pages permite:</p>
+<ul>
+<li>Backend sempre online</li>
+<li>Documentação pública clara</li>
+<li>Atualizações automáticas</li>
+<li>Pipeline profissional real</li>
+</ul>
+<p>Isso transforma o ZenBot em um <strong>projeto completo de engenharia
+de software</strong>, não apenas um experimento local.</p>
 </main>
 
 <footer>
