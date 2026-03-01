@@ -275,7 +275,9 @@ RESPOSTA:
                     {"role": "user", "content": prompt}
                 ],
                 "temperature": 0.65,
-                "max_tokens": 800
+                "max_tokens": 500,
+                "frequency_penalty": 0.5, # Reduz a repetição de palavras idênticas
+                "presence_penalty": 0.4    # Incentiva a falar sobre novos tópicos
             }
 
             r = requests.post(GROQ_URL, json=payload, headers=headers, timeout=TIMEOUT)
