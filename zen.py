@@ -139,8 +139,8 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
                     },
                     {"role": "user", "content": prompt_final}
                 ],
-                "temperature": 0.45,       
-                "max_tokens": 650,        
+                "temperature": 0.65,       
+                "max_tokens": 800,        
                 "frequency_penalty": 0.45, 
                 "presence_penalty": 0.25
             }
