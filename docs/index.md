@@ -48,6 +48,10 @@ Criar um chatbot baseado em inteligência artificial capaz de responder pergunta
 
 - 🗺️ [Roadmap](09-roadmap.html)
 
+### 🔹 Jornada
+
+- 🛤️ [Jornada de Aprendizado — Diário de Construção](10-jornada-de-aprendizado.html)
+
 ---
 
 ## 🧠 Conceitos fundamentais
