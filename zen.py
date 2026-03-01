@@ -123,6 +123,11 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
             PERGUNTA: {pergunta}
 
             RESPOSTA:
+            - Use frases curtas e respiração natural.
+            - Não invente fatos fora da base de conhecimento.
+            - Se não souber, responda com uma reflexão sobre Shoshin ou Zazen.
+            - Evite introduções mecânicas como "Baseado nos textos...".
+            - Desenvolva o raciocínio de forma profunda, mas sem academicismo.            
             """
 
             payload = {
