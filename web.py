@@ -181,6 +181,18 @@ HTML_PAGE = f"""
             color: #a3998e;
             letter-spacing: 0.5px;
         }}
+        .doc-link {{
+            display: block;
+            margin-top: 10px;
+            color: #8c8375;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }}
+        .doc-link:hover {{
+            color: #2d362e;
+            text-decoration: underline;
+        }}        
     </style>
 </head>
 <body>
@@ -211,6 +223,7 @@ HTML_PAGE = f"""
 
         <div class="footer">
             digite "sair", "ok" ou "gassho" para encerrar
+            <a href="https://chizuzen.github.io/Zenbot/" target="_blank" class="doc-link">📖 Ver Documentação do Projeto</a>
         </div>
 
     </div>
