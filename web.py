@@ -99,42 +99,38 @@ HTML_PAGE = f"""
 # ============================================
 # ROTAS DA API
 # ============================================
-@app.get("/", response_class=HTMLResponse)
-async def get_index():
-    return HTML_PAGE
-
 @app.post("/ask")
 async def ask(request: Request):
     try:
         data = await request.json()
-    except:
-        return JSONResponse({{"resposta": "(silêncio)"}})
+        pergunta = data.get("pergunta", "").strip()
+        
+        if not pergunta:
+            return JSONResponse({"resposta": "O silêncio é a resposta para o vazio."})
 
-    pergunta = data.get("pergunta", "").strip()
-    if not pergunta:
-        return JSONResponse({{"resposta": "(silêncio)"}})
+        # Recupera sessão
+        session_id = request.cookies.get("chizu_session") or str(uuid4())
+        historico = conversation_memory.setdefault(session_id, [])
 
-    # Lógica de saída rápida
-    if pergunta.lower() in {{"sair", "exit", "quit", "gassho", "obrigado", "ok"}}:
-        return JSONResponse({{"resposta": random.choice(DESPEDIDA_JS)}})
+        # Tenta obter a resposta do mestre
+        try:
+            resposta = responder(pergunta, historico)
+        except Exception as e:
+            print(f"Erro na função responder: {e}")
+            return JSONResponse({"resposta": f"O mestre está em meditação profunda. (Erro: {e})"}, status_code=500)
 
-    session_id = request.cookies.get("chizu_session") or str(uuid4())
-    historico = conversation_memory.setdefault(session_id, [])
+        # Atualiza memória
+        historico.append({"role": "user", "content": pergunta})
+        historico.append({"role": "assistant", "content": resposta})
+        conversation_memory[session_id] = historico[-6:]
 
-    try:
-        resposta = responder(pergunta, historico)
+        response = JSONResponse({"resposta": resposta})
+        response.set_cookie("chizu_session", session_id, max_age=60*60*24*7)
+        return response
+
     except Exception as e:
-        print(f"Erro ao chamar responder: {{e}}")
-        resposta = "(O mestre está em silêncio profundo no momento.)"
-
-    # Atualiza memória
-    historico.append({{"role": "user", "content": pergunta}})
-    historico.append({{"role": "assistant", "content": resposta}})
-    conversation_memory[session_id] = historico[-6:]
-
-    response = JSONResponse({{"resposta": resposta}})
-    response.set_cookie("chizu_session", session_id, max_age=60*60*24*7)
-    return response
+        print(f"Erro geral no servidor: {e}")
+        return JSONResponse({"resposta": "Houve um tremor na montanha digital."}, status_code=500)
 
 if __name__ == "__main__":
     import uvicorn
