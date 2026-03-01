@@ -14,6 +14,7 @@
       color: #1f2937;
     }
 
+    /* Cabeçalho - Ajustado para legibilidade do link */
     header {
       background: linear-gradient(135deg, #1e3a8a, #2563eb);
       color: white;
@@ -23,14 +24,27 @@
     header h1 {
       margin: 0;
       font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
+    /* 🔥 CORREÇÃO: Link 'Voltar' mais claro para contraste total */
     header a {
-      color: #dbeafe;
+      color: #dbeafe; /* Azul celestial bem claro */
       text-decoration: none;
       font-size: 0.9rem;
+      display: inline-block;
+      margin-top: 5px;
+      transition: color 0.2s ease;
     }
 
+    header a:hover {
+      color: white; /* Fica branco puro no hover */
+      text-decoration: underline; /* Sublinha para indicar ação */
+    }
+
+    /* Conteúdo Principal */
     main {
       max-width: 960px;
       margin: 2rem auto;
@@ -74,9 +88,9 @@
       font-family: "SFMono-Regular", Consolas, monospace;
     }
 
-    /* Listas e Links de Navegação */
+    /* Listas e Links de Navegação (Limpos, sem bolinhas) */
     main ul {
-      list-style: none; /* Remove as bolinhas para um visual limpo */
+      list-style: none; 
       padding-left: 0.5rem;
     }
 
@@ -84,14 +98,15 @@
       margin-bottom: 0.6rem;
     }
 
-    a {
+    /* Links Gerais no Texto */
+    main a {
       text-decoration: none;
       color: #2563eb;
       font-weight: 500;
       transition: color 0.2s ease;
     }
 
-    a:hover {
+    main a:hover {
       text-decoration: underline;
       color: #1e40af;
     }

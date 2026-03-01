@@ -14,6 +14,7 @@
       color: #1f2937;
     }
 
+    /* Cabeçalho - Ajustado para legibilidade do link */
     header {
       background: linear-gradient(135deg, #1e3a8a, #2563eb);
       color: white;
@@ -23,14 +24,27 @@
     header h1 {
       margin: 0;
       font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
+    /* 🔥 CORREÇÃO: Link 'Voltar' mais claro para contraste total */
     header a {
-      color: #dbeafe;
+      color: #dbeafe; /* Azul celestial bem claro */
       text-decoration: none;
       font-size: 0.9rem;
+      display: inline-block;
+      margin-top: 5px;
+      transition: color 0.2s ease;
     }
 
+    header a:hover {
+      color: white; /* Fica branco puro no hover */
+      text-decoration: underline; /* Sublinha para indicar ação */
+    }
+
+    /* Conteúdo Principal */
     main {
       max-width: 960px;
       margin: 2rem auto;
@@ -74,9 +88,9 @@
       font-family: "SFMono-Regular", Consolas, monospace;
     }
 
-    /* Listas e Links de Navegação */
+    /* Listas e Links de Navegação (Limpos, sem bolinhas) */
     main ul {
-      list-style: none; /* Remove as bolinhas para um visual limpo */
+      list-style: none; 
       padding-left: 0.5rem;
     }
 
@@ -84,14 +98,15 @@
       margin-bottom: 0.6rem;
     }
 
-    a {
+    /* Links Gerais no Texto */
+    main a {
       text-decoration: none;
       color: #2563eb;
       font-weight: 500;
       transition: color 0.2s ease;
     }
 
-    a:hover {
+    main a:hover {
       text-decoration: underline;
       color: #1e40af;
     }
@@ -126,7 +141,55 @@
 </header>
 
 <main>
-
+<h1 id="conceitos-fundamentais-zenbot">🧠 Conceitos Fundamentais —
+ZenBot</h1>
+<p>Esta seção reúne os <strong>principais conceitos técnicos e
+teóricos</strong> que sustentam a construção do ZenBot.</p>
+<p>Ela foi pensada como um <strong>guia progressivo de
+aprendizado</strong>, partindo das bases da computação até os
+fundamentos modernos da inteligência artificial.</p>
+<hr />
+<h2 id="navegação-pelos-conceitos">📚 Navegação pelos conceitos</h2>
+<ul>
+<li>🖥️ <a href="01-sistemas-operacionais.html">Sistemas
+operacionais</a></li>
+<li>🛠️ <a href="02-ferramentas-de-desenvolvimento.html">Ferramentas de
+desenvolvimento</a></li>
+<li>🌐 <a href="03-servidores-e-deploy.html">Servidores e
+deploy</a></li>
+<li>🤖 <a href="04-inteligencia-artificial.html">Inteligência
+artificial</a></li>
+<li>🧠 <a href="05-modelos-e-llms.html">Modelos e LLMs</a></li>
+<li>🧬 <a href="06-embeddings.html">Embeddings</a></li>
+<li>🔍 <a href="07-busca-semantica.html">Busca semântica</a></li>
+<li>🧩 <a href="08-pipeline-do-zenbot.html">Pipeline do ZenBot</a></li>
+<li>☯️ <a href="09-metafora-zen.html">Metáfora Zen — A Arquitetura
+Mental do ZenBot</a></li>
+</ul>
+<hr />
+<h2 id="objetivo-desta-seção">🎯 Objetivo desta seção</h2>
+<p>Oferecer uma <strong>base sólida de entendimento</strong>, permitindo
+que qualquer pessoa:</p>
+<ul>
+<li>Compreenda o funcionamento interno do ZenBot</li>
+<li>Aprenda os conceitos técnicos envolvidos</li>
+<li>Construa seus próprios projetos de IA com clareza</li>
+<li>Desenvolva pensamento sistêmico em software</li>
+</ul>
+<hr />
+<h2 id="filosofia">☯️ Filosofia</h2>
+<p>Não se trata apenas de tecnologia.</p>
+<p>Trata-se de <strong>compreensão profunda, clareza mental e
+simplicidade consciente</strong>.</p>
+<p>Cada conceito aqui apresentado busca equilibrar:</p>
+<blockquote>
+<p>Rigor técnico<br />
++ clareza didática<br />
++ reflexão conceitual</p>
+</blockquote>
+<hr />
+<p>📘 <em>Voltar ao índice geral:</em> <a
+href="../index.html">Documentação ZenBot</a></p>
 </main>
 
 <footer>
