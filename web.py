@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 import random
 import json
 import base64
@@ -21,6 +22,7 @@ conversation_memory = {}
 verificar_chave()
 aquecer_modelo()
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="."), name="static")
 
 # ============================================
 # MENSAGENS ZEN PARA O FRONTEND
@@ -54,146 +56,7 @@ HTML_PAGE = f"""
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chizu · Mestre Zen</title>
-    <style>
-        body {{
-            background: #f4f1ea;
-            font-family: 'Georgia', serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 1rem;
-            color: #2c3e2f;
-        }}
-        .container {{
-            max-width: 550px;
-            width: 100%;
-            background: white;
-            border-radius: 45px;
-            padding: 4rem 2.5rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 1px solid #e0d6cc;
-        }}
-        h1 {{
-            font-size: 2.8rem;
-            margin: 0;
-            font-weight: 400;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }}
-        .sub {{
-            font-size: 1.1rem;
-            color: #4a5a4d;
-            font-style: italic;
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-        }}
-        .ref {{
-            font-size: 0.9rem;
-            color: #8c8375;
-            line-height: 1.4;
-            margin-bottom: 3rem;
-        }}
-        .ref em {{
-            color: #6b5e4a;
-            font-style: italic;
-            display: block;
-            margin: 4px 0;
-        }}
-
-        input:focus {{
-            border-color: #9b8c7c;
-        }}
-
-        .input-container {{ 
-            margin-bottom: 1rem;
-        }}
-
-        input {{ 
-            width: 100%; /* Faz o campo ocupar a largura total */
-            box-sizing: border-box;
-            padding: 1.2rem 1.6rem;
-            border: 1px solid #e0d6cc;
-            border-radius: 25px;
-            font-family: inherit;
-            font-size: 1.1rem;
-            outline: none;
-        }}
-
-        .button-container {{ 
-            margin: 1.5rem 0; /* Cria o espaço entre a pergunta e a resposta */
-            text-align: center;
-        }}
-
-        button {{ 
-            background: #2d362e;
-            color: white;
-            border: none;
-            padding: 0.8rem 2.5rem; /* Ajustei o padding para um formato de botão melhor */
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 1.1rem;
-        }}
-
-
-        button:hover {{
-            background: #1f2620;
-        }}
-        button:disabled, input:disabled {{
-            opacity: 0.5;
-            cursor: not-allowed;
-        }}
-        .loading {{
-            opacity: 0.5;
-            pointer-events: none;
-        }}
-        .resposta {{
-            margin-top: 1rem;
-            padding: 2rem;
-            min-height: 120px;
-            border: 1px solid #ede4db;
-            border-radius: 30px;
-            background: #fdfcfb;
-            text-align: left;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #3e4a3f;
-            white-space: pre-wrap;
-        }}
-        .resposta em {{
-            color: #7f6e5d;
-            font-style: italic;
-        }}
-        .avatar {{
-            width: 120px; /* Tamanho ideal para o topo */
-            height: auto;
-            margin: 0 auto 1.5rem auto; /* Centraliza e dá espaço para o texto */
-            display: block; /* Garante que o margin auto funcione */
-        }}        
-        .footer {{
-            margin-top: 2.5rem;
-            font-size: 0.85rem;
-            color: #a3998e;
-            letter-spacing: 0.5px;
-        }}
-        .doc-link {{
-            display: block;
-            margin-top: 10px;
-            color: #8c8375;
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.3s;
-        }}
-        .doc-link:hover {{
-            color: #2d362e;
-            text-decoration: underline;
-        }}        
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">

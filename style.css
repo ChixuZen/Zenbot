@@ -1,0 +1,151 @@
+/* Configurações Gerais de Layout */
+body {
+    background: #f4f1ea;
+    font-family: 'Georgia', serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    color: #2c3e2f;
+}
+
+.container {
+    max-width: 550px;
+    width: 100%;
+    background: white;
+    border-radius: 45px;
+    padding: 4rem 2.5rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    text-align: center;
+    border: 1px solid #e0d6cc;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin: 0;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.sub {
+    font-size: 1.1rem;
+    color: #4a5a4d;
+    font-style: italic;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.ref {
+    font-size: 0.9rem;
+    color: #8c8375;
+    line-height: 1.4;
+    margin-bottom: 3rem;
+}
+
+.ref em {
+    color: #6b5e4a;
+    font-style: italic;
+    display: block;
+    margin: 4px 0;
+}
+
+/* Inputs e Botões */
+input { 
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.2rem 1.6rem;
+    border: 1px solid #e0d6cc;
+    border-radius: 25px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+input:focus {
+    border-color: #9b8c7c;
+}
+
+.input-container { 
+    margin-bottom: 1rem;
+}
+
+.button-container { 
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+button { 
+    background: #2d362e;
+    color: white;
+    border: none;
+    padding: 0.8rem 2.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.1rem;
+}
+
+button:hover {
+    background: #1f2620;
+}
+
+button:disabled, input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Área de Resposta */
+.resposta {
+    margin-top: 1rem;
+    padding: 2rem;
+    min-height: 120px;
+    border: 1px solid #ede4db;
+    border-radius: 30px;
+    background: #fdfcfb;
+    text-align: left;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #3e4a3f;
+    white-space: pre-wrap;
+}
+
+.resposta em {
+    color: #7f6e5d;
+    font-style: italic;
+}
+
+/* Avatar e Rodapé */
+.avatar {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 1.5rem auto;
+    display: block;
+}
+
+.footer {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: #a3998e;
+    letter-spacing: 0.5px;
+}
+
+/* Link da Documentação (Sem marcação/sublinhado) */
+.doc-link {
+    display: block;
+    margin-top: 10px;
+    color: #3b82f6;
+    text-decoration: none !important;
+    font-size: 0.8rem;
+    transition: color 0.3s;
+}
+
+.doc-link:hover, .doc-link:active, .doc-link:focus {
+    text-decoration: none !important;
+    color: #1e40af;
+    outline: none;
+}
