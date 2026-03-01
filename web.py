@@ -99,6 +99,10 @@ HTML_PAGE = f"""
 # ============================================
 # ROTAS DA API
 # ============================================
+@app.get("/", response_class=HTMLResponse)
+async def get_index():
+    return HTML_PAGE
+
 @app.post("/ask")
 async def ask(request: Request):
     try:
@@ -106,23 +110,21 @@ async def ask(request: Request):
         pergunta = data.get("pergunta", "").strip()
         
         if not pergunta:
-            return JSONResponse({"resposta": "O silêncio é a resposta para o vazio."})
+            return JSONResponse({"resposta": "O silêncio é a resposta."})
 
-        # Palavras de saída usando uma LISTA [] em vez de SET {}
+        # Corrigindo a lista para evitar o Erro 500 anterior:
         palavras_saida = ["sair", "exit", "quit", "gassho", "obrigado", "ok"]
         if pergunta.lower() in palavras_saida:
             return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
 
-        # Recupera sessão
         session_id = request.cookies.get("chizu_session") or str(uuid4())
         historico = conversation_memory.setdefault(session_id, [])
 
-        # Tenta obter a resposta do mestre
+        # Resposta do Mestre
         try:
             resposta = responder(pergunta, historico)
         except Exception as e:
-            print(f"Erro na função responder: {e}")
-            return JSONResponse({"resposta": f"O mestre está em meditação profunda. (Erro: {e})"}, status_code=500)
+            return JSONResponse({"resposta": f"O mestre medita. (Erro: {str(e)})"}, status_code=500)
 
         # Atualiza memória
         historico.append({"role": "user", "content": pergunta})
@@ -134,9 +136,10 @@ async def ask(request: Request):
         return response
 
     except Exception as e:
-        print(f"Erro geral no servidor: {e}")
-        return JSONResponse({"resposta": "Houve um tremor na montanha digital."}, status_code=500)
-    
+        return JSONResponse({"resposta": "Tremor na montanha digital."}, status_code=500)
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Importante: O Render usa a porta da variável de ambiente $PORT
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
