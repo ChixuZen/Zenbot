@@ -108,6 +108,11 @@ async def ask(request: Request):
         if not pergunta:
             return JSONResponse({"resposta": "O silêncio é a resposta para o vazio."})
 
+        # Palavras de saída usando uma LISTA [] em vez de SET {}
+        palavras_saida = ["sair", "exit", "quit", "gassho", "obrigado", "ok"]
+        if pergunta.lower() in palavras_saida:
+            return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
+
         # Recupera sessão
         session_id = request.cookies.get("chizu_session") or str(uuid4())
         historico = conversation_memory.setdefault(session_id, [])
@@ -131,7 +136,7 @@ async def ask(request: Request):
     except Exception as e:
         print(f"Erro geral no servidor: {e}")
         return JSONResponse({"resposta": "Houve um tremor na montanha digital."}, status_code=500)
-
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
