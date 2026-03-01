@@ -139,10 +139,12 @@ def responder(pergunta, historico=None, top_k=TOP_K, tentativas=2):
                     },
                     {"role": "user", "content": prompt_final}
                 ],
-                "temperature": 0.65,
-                "max_tokens": 500,
-                "frequency_penalty": 0.5, # Reduz repetição
-                "presence_penalty": 0.4    # Diversifica o vocabulário
+                "temperature": 0.5,        # Reduzido para ser mais focado e menos "viajado"
+                "max_tokens": 400,         # Reduzido para forçar síntese
+                "frequency_penalty": 0.8,  # Aumentado drasticamente para punir repetição de palavras
+                "presence_penalty": 0.6    # Aumentado para incentivar que ele mude de assunto rápido
+
+
             }
 
             r = requests.post(GROQ_URL, json=payload, headers={"Authorization": f"Bearer {GROQ_API_KEY}"}, timeout=TIMEOUT)
