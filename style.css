@@ -154,6 +154,14 @@ button:disabled, input:disabled {
 .doc-link:hover {
     color: #1e40af;
 }
+.input-container { 
+    margin-bottom: 2rem; /* Espaço direto para a resposta */
+}
+
+input {
+    /* Mantém seu estilo, mas talvez um foco mais suave */
+    transition: all 0.3s ease;
+}
 
 /* Responsividade para Celular */
 @media (max-width: 500px) {

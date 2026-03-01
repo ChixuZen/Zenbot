@@ -13,7 +13,7 @@ if os.path.exists("avatar.png"):
     with open("avatar.png", "rb") as img_file:
         AVATAR_B64 = f"data:image/png;base64,{base64.b64encode(img_file.read()).decode()}"
 
-# Memória temporária em RAM (limpa quando o Render reinicia)
+# Memória temporária em RAM
 conversation_memory = {}
 
 # ============================================
@@ -24,30 +24,25 @@ aquecer_modelo()
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="."), name="static")
 
-# ============================================
-# MENSAGENS ZEN PARA O FRONTEND
-# ============================================
+# Mensagens para o Frontend
 DESPEDIDA_JS = [
     "Que o silêncio te acompanhe.",
     "O caminho se abre diante de ti.",
     "Vá em paz. O vazio te espera.",
     "Que a mente de principiante floresça.",
-    "Até o próximo encontro no vazio.",
-    "O vento leva minhas palavras. Fica com o silêncio.",
     "Lembre-se: a montanha também é caminho."
 ]
 
 AGUARDANDO_JS = [
     "Chizu medita...",
     "O mestre contempla sua pergunta...",
-    "Uma brisa suave anuncia a resposta...",
     "O silêncio se aprofunda...",
     "Chizu respira fundo...",
     "As folhas balançam ao vento..."
 ]
 
 # ============================================
-# PÁGINA HTML COMPLETA (LAYOUT PREMIUM)
+# PÁGINA HTML (LIMPA E SEM DUPLICIDADE)
 # ============================================
 HTML_PAGE = f"""
 <!DOCTYPE html>
@@ -72,85 +67,31 @@ HTML_PAGE = f"""
             
             <div class="header-quote">
                 Inspirado em<br>
-                <em>"Mente Zen, Mente de Principiante"</em>
+                <em>"Mente Zen, Mente de Principiante"</em><br>
                 Shunryu Suzuki
             </div>
         </div>
 
-        <!-- Pergunta -->
         <div class="input-container">
-            <input type="text" id="pergunta" placeholder="Fale com Chizu" autofocus>
+            <input type="text" id="pergunta" placeholder="Pressione Enter para falar com Chizu..." autofocus>
         </div>
 
-        <!-- Botão entre a pergunta e a resposta -->
-        <div class="button-container">
-            <button id="perguntar">Enviar</button>
-        </div>
-
-        <!-- Resposta -->
         <div class="resposta" id="resposta">
             <em>O silêncio precede a resposta...</em>
         </div>
 
         <div class="footer">
-            digite "sair", "ok" ou "gassho" para encerrar
+            digite "sair", "ok" ou "gassho" para encerrar<br>
             <a href="https://chizuzen.github.io/Zenbot/" target="_blank" class="doc-link">📖 Ver Documentação do Projeto</a>
         </div>
 
     </div>
 
     <script>
-        const DESPEDIDA = {json.dumps(DESPEDIDA_JS)};
-        const AGUARDANDO = {json.dumps(AGUARDANDO_JS)};
-        const PALAVRAS_SAIDA = ['sair', 'exit', 'quit', 'gassho', 'obrigado'];
-
-        const input = document.getElementById('pergunta');
-        const button = document.getElementById('perguntar');
-        const respostaDiv = document.getElementById('resposta');
-
-        function randomMsg(arr) {{
-            return arr[Math.floor(Math.random() * arr.length)];
-        }}
-
-        window.addEventListener('DOMContentLoaded', () => {{
-            respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
-        }});
-
-        async function fazerPergunta() {{
-            const pergunta = input.value.trim();
-            if (!pergunta) return;
-
-            if (PALAVRAS_SAIDA.includes(pergunta.toLowerCase())) {{
-                respostaDiv.innerHTML = `🧘 ${{randomMsg(DESPEDIDA)}}`;
-                input.disabled = true;
-                button.disabled = true;
-                return;
-            }}
-
-            button.classList.add('loading');
-            button.disabled = true;
-            respostaDiv.innerHTML = `<em>${{randomMsg(AGUARDANDO)}}</em>`;
-
-            try {{
-                const response = await fetch('/ask', {{
-                    method: 'POST',
-                    headers: {{ 'Content-Type': 'application/json' }},
-                    body: JSON.stringify({{ pergunta }})
-                }});
-                const data = await response.json();
-                respostaDiv.innerHTML = data.resposta;
-            }} catch (error) {{
-                respostaDiv.innerHTML = '<em>(o vento levou sua pergunta...)</em>';
-            }} finally {{
-                button.classList.remove('loading');
-                button.disabled = false;
-            }}
-            input.value = '';
-        }}
-
-        button.addEventListener('click', fazerPergunta);
-        input.addEventListener('keypress', (e) => {{ if (e.key === 'Enter') fazerPergunta(); }});
+        window.DESPEDIDA_JS = {json.dumps(DESPEDIDA_JS)};
+        window.AGUARDANDO_JS = {json.dumps(AGUARDANDO_JS)};
     </script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
 """
@@ -167,32 +108,31 @@ async def ask(request: Request):
     try:
         data = await request.json()
     except:
-        return JSONResponse({"resposta": "(silêncio)"})
+        return JSONResponse({{"resposta": "(silêncio)"}})
 
     pergunta = data.get("pergunta", "").strip()
     if not pergunta:
-        return JSONResponse({"resposta": "(silêncio)"})
+        return JSONResponse({{"resposta": "(silêncio)"}})
 
-    if pergunta.lower() in {"sair", "exit", "quit", "gassho", "obrigado"}:
-        return JSONResponse({"resposta": random.choice(DESPEDIDA_JS)})
+    # Lógica de saída rápida
+    if pergunta.lower() in {{"sair", "exit", "quit", "gassho", "obrigado", "ok"}}:
+        return JSONResponse({{"resposta": random.choice(DESPEDIDA_JS)}})
 
-    # Identificação da sessão para memória
     session_id = request.cookies.get("chizu_session") or str(uuid4())
     historico = conversation_memory.setdefault(session_id, [])
 
-    # Chama o zen.py (certifique-se que responder aceita pergunta e historico)
     try:
         resposta = responder(pergunta, historico)
-    except TypeError:
-        # Fallback caso seu zen.py ainda não aceite histórico
-        resposta = responder(pergunta)
+    except Exception as e:
+        print(f"Erro ao chamar responder: {{e}}")
+        resposta = "(O mestre está em silêncio profundo no momento.)"
 
     # Atualiza memória
-    historico.append({"role": "user", "content": pergunta})
-    historico.append({"role": "assistant", "content": resposta})
+    historico.append({{"role": "user", "content": pergunta}})
+    historico.append({{"role": "assistant", "content": resposta}})
     conversation_memory[session_id] = historico[-6:]
 
-    response = JSONResponse({"resposta": resposta})
+    response = JSONResponse({{"resposta": resposta}})
     response.set_cookie("chizu_session", session_id, max_age=60*60*24*7)
     return response
 
