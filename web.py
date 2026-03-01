@@ -60,13 +60,21 @@ HTML_PAGE = f"""
 </head>
 <body>
     <div class="container">
-        <h1>Chizu</h1>
-        <div class="sub">mestre zen digital</div>
-        <img src="{AVATAR_B64}" alt="Mestre Chizu" class="avatar">
-        <div class="ref">
-            Inspirado em<br>
-            <em>"Mente Zen, Mente de Principiante"</em>
-            Shunryu Suzuki
+        <div class="header-card">
+            <div class="header-info">
+                <h1>Chizu</h1>
+                <div class="sub">mestre zen digital</div>
+            </div>
+            
+            <div class="header-avatar">
+                <img src="{AVATAR_B64}" alt="Mestre Chizu">
+            </div>
+            
+            <div class="header-quote">
+                Inspirado em<br>
+                <em>"Mente Zen, Mente de Principiante"</em>
+                Shunryu Suzuki
+            </div>
         </div>
 
         <!-- Pergunta -->
